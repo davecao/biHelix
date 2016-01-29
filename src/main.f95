@@ -199,7 +199,6 @@ program helix_param
     write(*, *) 'Prepare to write to ', output_filename
   end if
   ! Write to the file
-  call report(angles, fout, msg="Bending angles:")
   call report(directions, fout, msg="Directions:")
   call report(helix_origins, fout, msg="Helix origins:")
   call report(reference_axis, fout, msg="Reference axis:")
