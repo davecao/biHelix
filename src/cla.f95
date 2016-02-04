@@ -58,7 +58,7 @@ module cla
   character(len=STRLEN), dimension(6) :: cla_kindstr
   character(len=STRLEN), private :: cla_empty
   character(len=STRLEN), dimension(6) :: cla_true_str
- 
+
   type, private :: cla_t
      character(len=2)  :: key
      character(len=STRLEN)  :: longkey 
@@ -73,12 +73,11 @@ module cla
      integer(kind=int_kind) :: kind
      character(len=STRLEN)  :: default     
   end type cla_posarg_t
-  
-  
+
   type(cla_t), private, dimension(:), pointer :: cla_registry
   type(cla_posarg_t), private, dimension(:), pointer :: cla_posarg_registry
-  
-  
+
+
   integer(kind=int_kind), private :: cla_num
   integer(kind=int_kind), private :: cla_posarg_num  
 
@@ -87,7 +86,7 @@ module cla
           cla_init_default, & ! no input parameters ==> read and parse the command line
           cla_init_str        ! string input parameter ==> read and parse the string instead of the command line
   end interface cla_init
-     
+
   interface cla_get
      module procedure &
           cla_get_float_r4, &
@@ -109,7 +108,7 @@ module cla
       implicit none
       CHARACTER(len=CLALEN) :: outs
       INTEGER               :: i, k, n
-           
+
       if (cla_cla_len == 0) then
          cla_command_argument_count = command_argument_count()
       else
@@ -225,7 +224,7 @@ module cla
       cla_true_str(5)='T'
       cla_true_str(6)='.true.'
     end subroutine cla_init_str
-    
+
     subroutine cla_init_default
       ! Allocate a zero size registry, just so that it gets
       ! associated.
@@ -293,7 +292,7 @@ module cla
       cla_posarg_registry(i)%default     = default
       deallocate(cla_posarg_registry_tmp)
     end subroutine
-    
+
     subroutine cla_register(key,longkey,description,kkind,default)
       character(len=2) :: key
       character(len=*) :: longkey
@@ -306,7 +305,7 @@ module cla
       if (len(key) > 2)then
         call cla_fatal("The short key should be a dash plus one character (-e)")
       end if
-      
+
       ! This is a dumb way to increase the size of the
       ! registry of command line arguments, but there
       ! should not be so many arguments that either speed
@@ -389,7 +388,7 @@ module cla
             call cla_message('    present?: F')
          endif
       end do
-      
+
       call cla_message(' ')
       call cla_message('Also, -?, -h, -H, -help, --help, and --usage are recognized.')
       call cla_message(' ')
@@ -462,7 +461,7 @@ module cla
          cla_key_arg_match = cla_str_eq(trim(key),arg(1:(iequal-1))) .or. &
                          cla_str_eq(trim(longkey),arg(1:(iequal-1)))      
     end function cla_key_arg_match   
-    
+
 
     logical function cla_str_eq(str1,str2)
       implicit none
@@ -472,8 +471,8 @@ module cla
       cla_str_eq = .false.
       if (str_test /= 0) cla_str_eq = .true.
     end function cla_str_eq
-    
-    
+
+
     subroutine cla_validate(cmd_name)
       implicit none
       character(len=*)      :: cmd_name
@@ -498,7 +497,7 @@ module cla
          stop
       endif
     end subroutine cla_validate
-    
+
     logical function cla_key_present(key)
       implicit none
       character(len=STRLEN) :: arg
@@ -506,7 +505,7 @@ module cla
       character(len=STRLEN) :: longkey
       character(len=2) :: shortkey
       character(len=STRLEN)  :: value
-      
+
       integer(kind=int_kind) :: ncla, k, kk
 !      integer :: cla_command_argument_count
 !      external cla_command_argument_count
@@ -517,7 +516,6 @@ module cla
       !     registered, but it is present on the command line.
  
       cla_key_present = .false.
-      
 
 !      print *,'Calling cla_key_present with key = ',trim(key)
       value = trim(cla_empty)
@@ -532,7 +530,7 @@ module cla
             exit
          end if
       end do
-      
+
       if (index(trim(value),trim(cla_empty)) /= 0) then
          call cla_show
          call cla_fatal('Unknown command line argument: '//trim(key))
@@ -549,7 +547,7 @@ module cla
             return
          endif
       enddo
-      
+
     end function cla_key_present
 
     subroutine cla_get_char(key,value)
@@ -634,7 +632,7 @@ module cla
          value = pvalue
          return
       end if
-      
+
       ! keyword
       do k=1,cla_num
          ! must test for exact match, not just substring
@@ -648,16 +646,16 @@ module cla
             kkind = cla_registry(k)%kind
          end if
       end do
-      
+
       if (index(trim(value),trim(cla_empty)) /= 0) then
          print *,'Error: You tried to retrieve an unknown command line argument: ',trim(key)
          call cla_show
          stop 5
       endif
-      
+
       ncla = cla_command_argument_count()
       if (ncla == 0) return
-      
+
       do k=1,ncla
          call cla_get_command_argument(k,arg)
          ! test for exact match
@@ -678,21 +676,19 @@ module cla
             endif
          end if
       enddo
-      
+
     end subroutine cla_get_char
-    
-    
+
     subroutine cla_get_float_r4(key,float_value)
       implicit none
       character(len=*)       :: key
       character(len=STRLEN)  :: value
       real(kind=4)           :: float_value
-      
-      
+
       call cla_get_char(key,value)
       if (index(trim(value),trim(cla_empty)) == 0) read(value,*)float_value
     end subroutine cla_get_float_r4
-    
+
   subroutine cla_get_float_r8(key,float_value)
     implicit none
     character(len=*)       :: key
@@ -769,6 +765,5 @@ module cla
        end do
     end if
   end subroutine cla_get_flag
-
 
 end module cla

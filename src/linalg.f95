@@ -15,8 +15,9 @@ module linalg
   interface svd
      module procedure lapack_dgesvd_interface
   end interface svd
-  public:: outer, cross, vecDegree
-  public:: matinv, M33INV, inverse, inv
+  public :: outer, cross, vecDegree
+  public :: matinv, M33INV, inverse, inv
+  public :: prj
   !public:: norm
   !interface norm
   !  module procedure L2norm ! interface for a module;procedure is implicit
@@ -39,6 +40,33 @@ contains
   ! status:
   !     not implemented yet! Is it necessary?
   !*****************************************************************************
+  !*****************************************************************************
+  ! Description:
+  !   Project the vector 'u' to the vector 'v'
+  !                      dot(U, V)       V
+  !       Prj(u to v) = ----------- * --------
+  !                       norm(V)      norm(V)
+  ! Arguments:
+  !    u(array of rank1): the first vector
+  !    v(array of rank1): the second vector
+  !
+  ! Returns:
+  !    c(array of rank1): a component on vector b
+  ! status:
+  !
+  !*****************************************************************************
+  subroutine prj(u, v, p)
+    real(DP), dimension(3), intent(in) :: u, v
+    real(DP), dimension(3), intent(out) :: p
+    real(DP), dimension(3) :: norm_v
+    real(DP) :: magnitude_v, dot_uv
+    
+    magnitude_v = norm2(v)
+    norm_v = v / magnitude_v
+    dot_uv = dot_product(u, v)
+    p = dot_uv / magnitude_v * norm_v
+
+  end subroutine prj
   !*****************************************************************************
   !  matinv  -  Compute the inverse of a 3x3 matrix.
   !   from helanal.f

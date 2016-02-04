@@ -9,7 +9,11 @@ program helix_param
   use cla
   use helanal
   use utilities
-  use PDBLib
+  use io, io_readline=>readline
+  use atom_mod
+  use group_mod
+  use strings
+  !use iso_varying_string
   !use memory use directly?
 
   ! *-- disable implicit type conversion --*
@@ -23,7 +27,13 @@ program helix_param
   character(len=1), dimension(:), save, allocatable:: chId
 
   real(DP), dimension(3) :: reference_axis = (/0.0, 0.0, 1.0/)
-  integer :: nrows, ncols, i, AllocateStatus, DeAllocateStatus
+  real(DP), dimension(3) :: upper = (/0.0, 0.0, 0.0/)
+  real(DP), dimension(3) :: lower = (/0.0, 0.0, 0.0/)
+  real(DP), dimension(3) :: mem_normal = (/0.0, 0.0, 0.0/)
+  character(len=STRLEN) :: axis_str
+  character(len=STRLEN), dimension(3) :: tokens
+  integer :: ntokens
+  integer :: natoms, ncols, i, AllocateStatus, DeAllocateStatus
   integer :: nin = 50
   integer :: nout = 6 ! to screen
   integer :: fout = 99  ! to file
@@ -45,7 +55,8 @@ program helix_param
   logical :: quiet
 
   ! * -- class atom --*
-  type(atom), save, allocatable:: ca_atoms(:) 
+  type(atom), save, allocatable:: ca_atoms(:)
+  type(group) :: atomGroup
   ! * -- input format -- *
   ! 1. 1-6(A6): 'ATOM  '
   ! 2. 7-11(I5): Atom serial number
@@ -91,10 +102,13 @@ program helix_param
 
   call cla_init
   !(compact, form)
-  call cla_register('-i', '--in', 'The input file name', cla_char, 'required')
-  call cla_register('-o', '--out', 'The output file name', cla_char, 'helix_out.txt')
-  call cla_register('-q', '--quiet', 'Only output to file', cla_flag, 'q')
-  call cla_register('-v', '--verbose', 'write more to file', cla_flag, 'v')
+  call cla_register('-i', '--in', 'The input file name.', cla_char, 'required')
+  call cla_register('-o', '--out', 'The output file name.', cla_char, 'helix_out.txt')
+  call cla_register('-r', '--ref', 'x, y, z of a reference axis.', cla_char, '0.0, 0.0, 1.0')
+  call cla_register('-u', '--upper', 'The center of the upper bilayer.', cla_char, '0.0, 0.0, 15.0')
+  call cla_register('-l', '--lower', 'The center of the lower bilayer.', cla_char, '0.0, 0.0, -15.0')
+  call cla_register('-q', '--quiet', 'Only output to file.', cla_flag, 'q')
+  call cla_register('-v', '--verbose', 'write more to file.', cla_flag, 'v')
 
   ! *-- processing command line arguments --*
   !call cla_validate
@@ -105,6 +119,33 @@ program helix_param
   else
     call cla_help("biHelix")
     stop
+  end if
+  ! -------- -r input_filename ------------
+  flag = cla_key_present('-r')
+  if (flag) then
+    call cla_get('-r', axis_str)
+    call parse(axis_str, ',', tokens, ntokens)
+    do i=1, ntokens
+      read(tokens(i), '(F8.3)') reference_axis(i)
+    end do
+  end if
+  ! -------- -u input_filename ------------
+  flag = cla_key_present('-u')
+  if (flag) then
+    call cla_get('-u', axis_str)
+    call parse(axis_str, ',', tokens, ntokens)
+    do i=1, ntokens
+      read(tokens(i), '(F8.3)') upper(i)
+    end do
+  end if
+  ! -------- -l input_filename ------------
+  flag = cla_key_present('-l')
+  if (flag) then
+    call cla_get('-l', axis_str)
+    call parse(axis_str, ',', tokens, ntokens)
+    do i=1, ntokens
+      read(tokens(i), '(F8.3)') lower(i)
+    end do
   end if
   ! -------- -o output_filename -----------
   flag = cla_key_present('-o')
@@ -129,6 +170,8 @@ program helix_param
   endif
 
   ! *-- load data --*
+  atomGroup = io_readline(input_filename)
+
   open(unit=nin, file=input_filename, status='old', action='read', iostat=iostat)
   if (iostat /= 0) then
     print *, "Failed to open ",input_filename, "status:", iostat
@@ -136,34 +179,34 @@ program helix_param
     stop 
   end if
   ! *-- read size of the matrix: first line --*
-  read(nin, *) nrows, ncols
+  read(nin, *) natoms, ncols
 
   ! *-- allocate memory --*
-  allocate(points(nrows, ncols), stat=AllocateStatus)
+  allocate(points(natoms, ncols), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for points'
 
-  allocate(resname(nrows), stat=AllocateStatus)
+  allocate(resname(natoms), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for resname'
 
-  allocate(resnum(nrows), stat=AllocateStatus)
+  allocate(resnum(natoms), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for resnum'
 
-  allocate(chId(nrows), stat=AllocateStatus)
+  allocate(chId(natoms), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for chId'
 
-  allocate(angles(nrows-6), stat=AllocateStatus)
+  allocate(angles(natoms-6), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for angles'
 
-  allocate(directions(nrows-3, ncols), stat=AllocateStatus)
+  allocate(directions(natoms-3, ncols), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for directions'
 
-  allocate(helix_origins(nrows-2, ncols), stat=AllocateStatus)
+  allocate(helix_origins(natoms-2, ncols), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for helix_origins'
 
-  allocate(ca_atoms(nrows), stat=AllocateStatus)
+  allocate(ca_atoms(natoms), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for atoms'
 
-  do i=1, nrows
+  do i=1, natoms
     ! read line by line
     read(nin, 10, iostat=iostat, iomsg=iomsg) recname, atNum, atName, altLoc, &
                   resname(i), chId(i), resnum(i), iCode, &
@@ -176,7 +219,7 @@ program helix_param
 
   if (.not.(quiet)) then
     write(nout, *) 'Read input file: ', input_filename
-    write(nout, '("nrows:",I6," ncols:",I6)') size(points, 1), size(points, 2)
+    write(nout, '("natoms:",I6," ncols:",I6)') size(points, 1), size(points, 2)
     write(nout, '(A15,*(F8.3, 2X))') 'Reference axis', reference_axis(:)
   end if
   ! *-- close file --*
@@ -187,9 +230,13 @@ program helix_param
            tilt, radc, rmsdc, rmsdl, r2, &
            reference_axis=reference_axis, info=quiet)
   ! *-- save result --*
-  do i=4, nrows - 3
+  do i=4, natoms - 3
       ca_atoms(i)%bending_angle = angles(i-3)
   end do
+
+  ! *-- distance to upper --*
+  !do i=1, natoms
+
   if (.not.(quiet)) then
     write(*, *) 'Scanning finished.'
   end if
@@ -202,22 +249,14 @@ program helix_param
   call report(directions, fout, msg="Directions:")
   call report(helix_origins, fout, msg="Helix origins:")
   call report(reference_axis, fout, msg="Reference axis:")
+  call report(upper, fout, msg="The center of upper layer:")
+  call report(lower, fout, msg="The center of lower layer:")
   write(fout, '(A, F12.3)') "Tilt angle w.r.t Reference axis:", tilt
 
-  do i=1, nrows
-    !write(fout, 20) ca_atoms(i)%recname, ca_atoms(i)%atNum, ca_atoms(i)%name, &
-    !                ca_atoms(i)%altLoc, ca_atoms(i)%resname, &
-    !                ca_atoms(i)%chId, ca_atoms(i)%resnum, &
-    !                ca_atoms(i)%iCode, &
-    !                ca_atoms(i)%x, ca_atoms(i)%y, ca_atoms(i)%z, &
-    !                ca_atoms(i)%bending_angle, ca_atoms(i)%d2top, &
-    !                ca_atoms(i)%d2bot
-    !write(fout, NML=ca_atoms(i))
+  do i=1, natoms
     call ca_atoms(i)%writef(unit=fout, iostat=iostat, iomsg=iomsg)
   end do
-  !if (iostat < 0) then
-  !  write(6, *) "EOF before end of data "//trim(iomsg)
-  !end if
+
   if ( .not.(quiet) ) then
     write(*, *) 'Finish writting.'
   end if
