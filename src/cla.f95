@@ -106,8 +106,8 @@ module cla
       ! The purpose is to easily adapt a program that runs using command line inputs into
       ! a program that can run with string input it eats from a pipe.
       implicit none
-      CHARACTER(len=CLALEN) :: outs
-      INTEGER               :: i, k, n
+      !CHARACTER(len=CLALEN) :: outs
+      INTEGER               :: i
 
       if (cla_cla_len == 0) then
          cla_command_argument_count = command_argument_count()
@@ -477,8 +477,8 @@ module cla
       implicit none
       character(len=*)      :: cmd_name
       character(len=STRLEN) :: arg
-      character(len=STRLEN)  :: value, key
-      integer(kind=int_kind) :: ncla, k, kk !, iequal
+      character(len=STRLEN)  :: key
+      integer(kind=int_kind) :: ncla !, iequal
       ncla = cla_command_argument_count()
       if (ncla == 0) return
       

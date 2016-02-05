@@ -5,6 +5,7 @@ module linalg
 
   use precision
   use utilities
+  use ieee_arithmetic
 
   real(DP), public, parameter :: TOL_SVD = 1e-13_dp
 
@@ -15,9 +16,11 @@ module linalg
   interface svd
      module procedure lapack_dgesvd_interface
   end interface svd
+  
   public :: outer, cross, vecDegree
   public :: matinv, M33INV, inverse, inv
   public :: prj
+
   !public:: norm
   !interface norm
   !  module procedure L2norm ! interface for a module;procedure is implicit
@@ -268,7 +271,7 @@ contains
 
     real(DP), dimension(size(A,1)) :: work  ! work array for LAPACK
     integer, dimension(size(A,1)) :: ipiv   ! pivot indices
-    integer :: n, info, i
+    integer :: n, info
 
     ! External procedures defined in LAPACK
     external DGETRF
@@ -372,6 +375,7 @@ contains
   ! Returns:
   !     angle (real(DP)): the acuted angle between A and B
   !*****************************************************************************
+
   function vecDegree(a, b, radians) result(angle)
     real(DP), intent(in):: a(:)
     real(DP), intent(in):: b(:)
@@ -379,8 +383,10 @@ contains
     real(DP), dimension(size(a)) :: v1
     real(DP), dimension(size(b)) :: v2
     logical :: rrad = .TRUE.
-    real(DP) :: angle_rad, angle_deg, angle
+    real(DP) :: angle_rad, angle
     integer :: v1_size, v2_size
+    ! initialize variables
+    angle = -10.0
     if (present(radians)) then
       rrad = radians
     end if
@@ -440,7 +446,10 @@ contains
     real(DP), intent(in):: A(:)
     real(DP), dimension(size(A)) :: res
     real(DP) :: n_val
-    n_val = sum(abs(A)) / n
+    if (ieee_support_inf(n_val)) then
+      n_val = ieee_value(n_val,  ieee_negative_inf)
+    end if
+    n_val = sum(abs(A))
     res = A / n_val
   end function L1norm
 
@@ -487,12 +496,11 @@ contains
     real(DP), dimension(N, N), intent(out):: VT
     !real(DP), dimension(N, N):: VT
     real(DP), dimension(:), allocatable:: work
-    integer :: nout = 6 ! to screen
-    integer :: lda, ldu, lwork, lwkopt, ldvt, info, i, j
+    integer :: lda, ldu, lwork, lwkopt, ldvt, info
     integer :: AllocateStatus, DeAllocateStatus
     character JOBU, JOBVT
     real(DP) :: eps, serrbd
-    real(DP), dimension(N) :: rcondu, rcondv, uerrbd, verrbd
+    !real(DP), dimension(N) :: rcondu, rcondv, uerrbd, verrbd
 
     ! *-- external subroutine --*
     !external ddisna

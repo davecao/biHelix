@@ -22,9 +22,9 @@ program helix_param
   ! *-- input --*
   real(DP), dimension(:, :), save, allocatable:: points
   real(DP), dimension(:), save, allocatable:: angles
-  character(len=3), dimension(:), save, allocatable:: resname
-  integer, dimension(:), save, allocatable::resnum
-  character(len=1), dimension(:), save, allocatable:: chId
+  !character(len=3), dimension(:), save, allocatable:: resname
+  !integer, dimension(:), save, allocatable::resnum
+  !character(len=1), dimension(:), save, allocatable:: chId
 
   real(DP), dimension(3) :: reference_axis = (/0.0, 0.0, 1.0/)
   real(DP), dimension(3) :: upper = (/0.0, 0.0, 0.0/)
@@ -34,21 +34,22 @@ program helix_param
   character(len=STRLEN), dimension(3) :: tokens
   integer :: ntokens
   integer :: natoms, ncols, i, AllocateStatus, DeAllocateStatus
-  integer :: nin = 50
+  !integer :: nin = 50
   integer :: nout = 6 ! to screen
   integer :: fout = 99  ! to file
-  integer :: atNum = 0
-  character(6) :: recname
-  character(4) :: atName
-  character :: altLoc, iCode
+  !integer :: atNum = 0
+  !character(6) :: recname
+  !character(4) :: atName
+  !character :: altLoc, iCode
   integer :: iostat
   character(LEN=100) :: iomsg
 
   ! *-- return helix params --*
   real(DP), save, allocatable:: directions(:, :)
   real(DP), save, allocatable:: helix_origins(:, :)
-  real(DP) :: tilt, radc, rmsdc, rmsdl, r2 
-
+  real(DP) :: tilt
+  !real(DP) :: radc, rmsdc, rmsdl, r2 
+ 
   ! *-- cla variables --*
   character(len=STRLEN) :: input_filename, output_filename
   logical :: flag, verbose
@@ -73,7 +74,7 @@ program helix_param
   ! 12. 39-46(F8.3): y of CA: y coordinate of CA
   ! 13. 47-54(F8.3): z of CA: z coordinate of CA
   ! *--------------------*
-10 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
+!10 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
 
   ! * -- output format -- *
   ! 1. 1-6(A6): 'ATOM  '
@@ -91,7 +92,7 @@ program helix_param
   ! 13. bending angle of the residue: f8.3 angle in degree
   ! 14. distance to upper layer: f8.3 angstroms to the upper layer
   ! 15. distance to lower layer: f8.3 angstroms to the lower layer
-20 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3)
+!20 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3)
 
   ! *-- cli --*
   ! character(len=STRLEN) :: key
@@ -232,8 +233,7 @@ program helix_param
 
   ! *-- fit --*
   call fit(points, angles, directions, helix_origins, &
-           tilt, radc, rmsdc, rmsdl, r2, &
-           reference_axis=reference_axis, info=quiet)
+           tilt, reference_axis=reference_axis, info=quiet)
   ! *-- save result --*
   do i=4, natoms - 3
       !ca_atoms(i)%bending_angle = angles(i-3)

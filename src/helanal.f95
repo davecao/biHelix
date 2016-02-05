@@ -315,18 +315,19 @@ contains
   !   rmsdl (dp):
   !   r2 (dp):
   !*****************************************************************************
-  subroutine fit_circle_lsq(origins, tilt_angle, axvec, &
-                            radc, rmsdc, rmsdl, r2, reference_axis)
+  subroutine fit_circle_lsq(origins, tilt_angle, axvec, reference_axis)
+    !                      radc, rmsdc, rmsdl, r2, reference_axis)
     !integer, parameter :: SP = kind(1.0)
     !integer, parameter :: DP = kind(1.0d0)
 
     real(DP), dimension(:,:), intent(in):: origins
     real(DP), dimension(3), optional, intent(in) :: reference_axis
-    real(DP), intent(out):: tilt_angle, radc, rmsdc, rmsdl, r2
+    real(DP), intent(out) :: tilt_angle
+    !real(DP), intent(out) :: radc, rmsdc, rmsdl, r2
     real(DP), dimension(:), intent(out) :: axvec
 
     ! *-- local variables --*
-    integer :: nrows, ncols, i, j
+    integer :: nrows, ncols
     real(DP), dimension(size(origins, 2)):: centroid ! dim=2: get columns
     real(DP), dimension(size(origins, 1), size(origins, 2)):: A
     real(DP), dimension(size(origins, 2), size(origins, 2)):: U
@@ -335,8 +336,6 @@ contains
     real(DP), dimension(3) :: ref_axis = (/0.0, 0.0, 1.0/)
     real(DP) :: ax(3) = 0.0
     real(DP) :: agreement = 0.0
-    real(DP) :: tilt
-
 
     ! *-- Optional argument --*
     if ( present(reference_axis) ) then
@@ -357,12 +356,13 @@ contains
     covMat = matmul(transpose(A), A)
     nrows = size(covMat, 1)
     ncols = size(covMat, 2)
-    ! * --------------------------------
+    ! * -------------------------------------------------
     ! Singular Value Decomposition:
     ! svd: covMat will be changed in svd
     ! U is column-wised singular vectors
     ! V is row-wised singular vectors
-    ! *---------------------------------
+    ! Note:  pay attention to the ill-conditioned matrix
+    ! *--------------------------------------------------
     call svd(covMat, nrows, ncols, U, S, VT)
 
     ! Point to the first point
@@ -376,16 +376,15 @@ contains
     tilt_angle = vecDegree(ax, reference_axis, radians=.FALSE.)
     axvec = ax
 
-    !write(6, *) "Tilt angle w.r.t Reference axis:"
-    !write(6, '(F12.3)') tilt_angle
     ! *-- SVD -> pseudo inv--*
+
     !bp = sum(origins, 2)
     !write(*, *) 'bp:'
     !write(*, '(*(F8.3, 2X))') bp
     !matp = matp + outer(bp, bp)
     !write(*, *) 'matp'
     !call mat2d_print(matp)
-    ! Note: ill-conditioned matrix
+
     !matp_inv = inv(matp)
     !call inverse(matp, matp_inv, 3) 
     !call M33INV (matp, matp_inv, OK_FLAG)
@@ -431,21 +430,23 @@ contains
   !   r2 (real(DP)) : estimated radius
   !*****************************************************************************
   subroutine fit(points, bending_angles, directions, origins, &
-                 tilt, radc, rmsdc, rmsdl, r2, &
-                 reference_axis, info)
+                 tilt, reference_axis, info)
+
+    !             tilt, radc, rmsdc, rmsdl, r2, &
+    !             reference_axis, info)
     !integer, parameter :: SP = kind(1.0)
     !integer, parameter :: DP = kind(1.0d0)
 
     real(DP),  intent(in):: points(:, :)
     real(DP), intent(out):: bending_angles(:)
     real(DP), intent(out):: directions(:, :), origins(:, :)
-    real(DP), intent(out):: tilt, radc, rmsdc, rmsdl, r2
+    real(DP), intent(out):: tilt
     real(DP), optional, intent(in):: reference_axis(:)
     logical, optional , intent(in):: info
     !f2py real(DP), intent(out) bending_angles
-    ! real(DP), intent(out):: radc, rmsdc, rmsdl
+    ! real(DP), intent(out)::  radc, rmsdc, rmsdl, r2
     ! real(DP), intent(out):: r2
-
+    
     ! *-- local variables --*
     logical :: quiet = .FALSE.
     real(DP):: direct(3), axvec(3)
@@ -461,16 +462,16 @@ contains
     integer(DP), allocatable:: bending_angles_matrix(:, :)
 
     ! *-- output format --*
-16  format (1x,'MATRIX M(I,J) FOR ANGLES BETWEEN LOCAL HELIX AXES I AND J')
+!16  format (1x,'MATRIX M(I,J) FOR ANGLES BETWEEN LOCAL HELIX AXES I AND J')
 17  format (i3,1x,40i3)
 19  format(1x,'AVERAGE TWIST (DEG.)',6x,f8.2,2x,'S.D.',f8.2,5x,'ADV',f8.2) 
-20  format(1x,'AVERAGE N',17x,f8.2,2x,'S.D.',f8.2,5x,'ADV',f8.2) 
+!20  format(1x,'AVERAGE N',17x,f8.2,2x,'S.D.',f8.2,5x,'ADV',f8.2) 
 21  format(1x,'AVERAGE UNIT HEIGHT (ANG.)',f8.2,2x,'S.D.',f8.2,5x,'ADV',f8.2) 
 27  format(1x,'MEAN BENDING ANGLE',8x,f8.3,2x,'S.D.',f8.3,5x,'ADV',f8.3) 
-28  format(1x,'SUMMARY OF PARAMETERS OBTAINED BY HELANAL'/) 
-29  format(1x,'MEAN BENDING ANGLE (DEG.)',15x,f8.3,2x,'S.D.',f8.3,2x,'ADV',f8.3) 
+!28  format(1x,'SUMMARY OF PARAMETERS OBTAINED BY HELANAL'/) 
+!29  format(1x,'MEAN BENDING ANGLE (DEG.)',15x,f8.3,2x,'S.D.',f8.3,2x,'ADV',f8.3) 
 30  format(1x,'MAXIMUM BENDING ANGLE (DEG.)',12x,f8.3)
-37  format(1x,'AVERAGE UNIT HEIGHT (ANG.)',14x,f8.3,2x,'S.D.',f8.3,2x,'ADV',f8.3)
+!37  format(1x,'AVERAGE UNIT HEIGHT (ANG.)',14x,f8.3,2x,'S.D.',f8.3,2x,'ADV',f8.3)
     ! *-- processing optional arguments --*
     if( present(info) ) quiet = info
     if ( present(reference_axis) ) ref_axis = reference_axis
@@ -555,7 +556,8 @@ contains
       write(6, 21) ave, sdev, mean_abs_std
     endif
     ! *-- fit to circle --*
-    call fit_circle_lsq(origins, tilt, axvec, radc, rmsdc, rmsdl, r2, ref_axis)
+    !call fit_circle_lsq(origins, tilt, axvec, radc, rmsdc, rmsdl, r2, ref_axis)
+    call fit_circle_lsq(origins, tilt, axvec, ref_axis)
     !if (.not.(quiet)) then
     !  write(6, *) 'fit_circle_lsq fininished'
     !  write(6, *) 'points', shape(points)

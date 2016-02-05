@@ -124,14 +124,14 @@ contains
     integer, optional, intent(in) :: nout
     character(*), optional, intent(in) :: fmt
     character(*), optional, intent(in) :: msg
-    character(*), parameter :: lfmt = '(*(F12.3, 2X))'
+    character(30) :: lfmt = '(*(F12.3, 2X))'
     integer :: unit_num = 6
     if (present(nout)) then
       unit_num = nout
     end if
-!    if (present(fmt)) then
-!      lfmt = fmt
-!    end if
+    if (present(fmt)) then
+      lfmt = fmt
+    end if
     if (present(msg)) then
       write(unit_num, *) msg
     end if
@@ -158,12 +158,18 @@ contains
     integer, optional, intent(in) :: nout
     character(*), optional, intent(in) :: fmt
     character(*), optional, intent(in) :: msg
-    character(*), parameter :: lfmt = '(10A, F12.3)'
+    character(30) :: lfmt = '(10A, F12.3)'
     integer :: unit_num = 6
     integer :: msg_len
 
     if (present(nout)) then
       unit_num = nout
+    end if
+    if (present(fmt)) then
+      lfmt = fmt
+    end if
+    if (present(msg)) then
+      write(unit_num, *) msg
     end if
     if (present(msg)) then
       msg_len = len(msg)
@@ -219,7 +225,7 @@ contains
   function reallocate_iv(p, n)
     integer, dimension(:), pointer :: p, reallocate_iv
     integer, intent(in) :: n
-    integer :: nold, mold, ierr
+    integer :: nold, ierr
     allocate(reallocate_iv(n), stat=ierr)
     if (ierr /= 0) call &
       error('reallocate_iv: problem in attempt to allocate memory')

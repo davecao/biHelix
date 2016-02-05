@@ -41,7 +41,7 @@ contains
   function new_group(natoms)
     integer, optional, intent(in) :: natoms
     integer :: init_natoms = 10
-    integer :: AllocateStatus, DeAllocateStatus
+    integer :: AllocateStatus
     type(group) :: new_group ! an instance of group
 
     if (present(natoms) .and. natoms > 10) then
@@ -62,7 +62,7 @@ contains
     !integer, optional, intent(in) :: nsize
     type(atom), dimension(:), allocatable :: tmp
     !class(atom), pointer :: atom_pt
-    integer :: AllocateStatus, DeAllocateStatus
+    integer :: AllocateStatus
     integer :: full
     integer :: fsize
 
