@@ -23,4 +23,9 @@ module precision
   ! *-- const parameters --*
   real(DP), parameter :: pi = 3.141592653589793238462643383279502884197
 
+  ! *-- stdin/ stdout --*
+  integer, parameter :: stdin = 5   ! read from cli
+  integer, parameter :: stdout = 6  ! write to screen
+
+
 end module precision

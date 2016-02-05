@@ -1,3 +1,32 @@
+! * -- ATOM format -- *
+! 1. 1-6(A6): 'ATOM  '
+! 2. 7-11(I5): Atom serial number
+! 3.  blank 1x 
+! 4. 13-16(A4):Atom name
+! 5. 17(A1): Alternate location indicator
+! 6. 18-20(A3): Residume name
+! 7. 21 blank(1x): blank
+! 8. 22(A1): chain ID
+! 9. 23-26 (I4): Residue sequence number
+! 10. 27 (A1): iCode
+!     blank 3x
+! 11. 31-38(F8.3): x of CA: x coordinate of CA
+! 12. 39-46(F8.3): y of CA: y coordinate of CA
+! 13. 47-54(F8.3): z of CA: z coordinate of CA
+! *--------------------*
+! 10 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
+!
+! * -- HEADER format -- *
+! 1. 1-6(A6): 'HEADER'
+! 2. 5x
+! 3. 11-50(A40): classification
+! 4. 51-59(A9): depDate
+! 5. 4x
+! 6. 63-66(A4): idCode, pdbid
+! ************************************************************************
+! 30 format(A6,5x,A40,A9,3x,A4)
+! ------------------------------------------------------------------------
+
 module io
   !****************
   ! other modules
@@ -26,12 +55,15 @@ contains
     character(6) :: recname = 'ATOM'
     character(4) :: atName
     character(len=1) :: chId, altLoc, iCode
+    character(len=40) :: cls
+    character(len=9) :: depDate
+    character(len=4) :: idCode
+
     !class(group), allocatable :: group_obj
     type(group):: group_obj
     type(atom) :: atom_obj
-
 10 format(I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
-    
+20 format(4x,A40,A9,3x,A4)
     ! create a group of atoms: initialize with 10 atoms
     group_obj = group(10)
     ! open files
@@ -47,6 +79,11 @@ contains
         buffer = buffer(pos+1:)
 
         select case (label)
+          case ('HEADER')
+            read(buffer, 20, iostat=ios) cls, depDate, idCode
+            group_obj%classification = cls
+            group_obj%depDate = depDate
+            group_obj%idCode = idCode
           case ('ATOM  ')
             read(buffer, 10, iostat=ios) atNum, atName, altLoc, resname, &
                                          chId, resnum, iCode, &

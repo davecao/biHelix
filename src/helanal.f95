@@ -319,7 +319,6 @@ contains
     !                      radc, rmsdc, rmsdl, r2, reference_axis)
     !integer, parameter :: SP = kind(1.0)
     !integer, parameter :: DP = kind(1.0d0)
-
     real(DP), dimension(:,:), intent(in):: origins
     real(DP), dimension(3), optional, intent(in) :: reference_axis
     real(DP), intent(out) :: tilt_angle
@@ -501,9 +500,9 @@ contains
                        points(i+2, :), points(i+3,:), &
                        direct, origin, twist, height, quiet)
       ! *-- save parameters of local helix --*
-      call report(direct, nout=6)
-      write(*,*) 'shape:', shape(directions)
-      write(*,*) 'shape:', shape(direct)
+      !call report(direct, nout=6)
+      !write(*,*) 'shape:', shape(directions)
+      !write(*,*) 'shape:', shape(direct)
       directions(i, :) = direct
       origins(i, :) = origin(1, :)
       origins(i+1, :) = origin(2, :)
@@ -571,7 +570,6 @@ contains
     !  write(6, *) 'fit vector', axvec
     !  write(6,*) '----'
     !end if
-
     ! *-- deallocate --*
     if (allocated(twists)) then
       deallocate(twists, stat=DeAllocateStatus)
