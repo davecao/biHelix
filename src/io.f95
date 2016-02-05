@@ -33,7 +33,7 @@ contains
 10 format(I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
     
     ! create a group of atoms: initialize with 10 atoms
-    !allocate(group_obj)
+    group_obj = group(10)
     ! open files
     open(fh, file=filename)
     ! ios is negative if an end of record condition is encountered or if
@@ -56,7 +56,6 @@ contains
                           resnum=resnum, iCode=iCode, &
                           x=x, y=y, z=z)
             call group_obj%add(atom_obj)
-            call group_obj%printf()
           case ('REFAXS')
             !read(buffer,'(1x,f8.3,f8.3,f8.3)') 
           case default

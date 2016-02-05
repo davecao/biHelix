@@ -141,7 +141,6 @@ module helanal
   use precision
   use utilities
   use linalg
-  use PDBLib
   ! *-- Global --*
   implicit none
 
@@ -496,16 +495,19 @@ contains
     end if
 
     do i=1, dsize
-       ! *-- slide along the helix spiral curve --*
-       call local_helix(points(i,:), points(i+1,:), &
-                        points(i+2, :), points(i+3,:), &
-                        direct, origin, twist, height, quiet)
-       ! *-- save parameters of local helix --*
-       directions(i, :) = direct
-       origins(i, :) = origin(1, :)
-       origins(i+1, :) = origin(2, :)
-       twists(i) = twist
-       heights(i) = height
+      ! *-- slide along the helix spiral curve --*
+      call local_helix(points(i,:), points(i+1,:), &
+                       points(i+2, :), points(i+3,:), &
+                       direct, origin, twist, height, quiet)
+      ! *-- save parameters of local helix --*
+      call report(direct, nout=6)
+      write(*,*) 'shape:', shape(directions)
+      write(*,*) 'shape:', shape(direct)
+      directions(i, :) = direct
+      origins(i, :) = origin(1, :)
+      origins(i+1, :) = origin(2, :)
+      twists(i) = twist
+      heights(i) = height
     end do
 
     ! *-- bending angle --*

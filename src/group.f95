@@ -22,7 +22,11 @@ module GROUP_MOD
     procedure :: add
     procedure :: getCoords
     procedure :: resize => reallocate
-    procedure :: printf
+    procedure :: getNumAtoms
+    procedure :: setAtomBendingAngleAt
+    procedure :: printf_db ! for debug
+    procedure :: printf_rl ! for both screen and file
+    generic :: printf => printf_db, printf_rl
   end type group
 
   interface group
@@ -47,7 +51,6 @@ contains
     new_group%full = init_natoms
     allocate(new_group%atoms(init_natoms), stat=AllocateStatus)
     if (AllocateStatus /= 0) stop 'Failed to allocate memory for atoms'
-    call new_group%printf()
   end function new_group
 
   !**********************************************
@@ -60,23 +63,20 @@ contains
     type(atom), dimension(:), allocatable :: tmp
     !class(atom), pointer :: atom_pt
     integer :: AllocateStatus, DeAllocateStatus
-    integer :: num_atoms
+    integer :: full
     integer :: fsize
 
-    num_atoms = this%num_atoms
-    fsize = num_atoms * 2
-
-    call this%printf()
+    full = this%full
+    fsize = full * 2
 
     allocate(tmp(fsize), stat=AllocateStatus)
     if (AllocateStatus /= 0) stop 'Atom: Failed to allocate memory'
-    write(*,*) 'num_atoms:', num_atoms, 'size: ', size(this%atoms)
-    tmp(1:num_atoms) = this%atoms
+    tmp(1:full) = this%atoms(1:full)
     !deallocate(this%atoms, stat=DeAllocateStatus)
     !if (DeAllocateStatus /= 0) stop 'Group: Failed to release memory'
     call move_alloc(from=tmp, to=this%atoms)
-    deallocate(tmp)
-    call this%printf()
+    this%full = fsize
+    !deallocate(tmp)
   end subroutine reallocate
   !**********************************************
   ! Group - add
@@ -86,17 +86,14 @@ contains
     class(group), intent(inout) :: this
     class(atom), intent(in) :: atom_obj
     integer :: natoms
-    call this%printf()
-
     natoms = this%num_atoms
-    if (natoms > this%full) then
+    
+    if (natoms >= this%full) then
       ! reallocate
-      ! gp_pt=>reallocate(gp_pt, 2*natoms)
       call this%resize()
     end if
-    this%atoms(natoms + 1) = atom_obj
+    this%atoms(natoms+1) = atom_obj
     this%num_atoms = natoms + 1
-    this%full = 2*natoms
   end subroutine
   !**********************************************
   ! Group - getCoords
@@ -115,21 +112,60 @@ contains
   end function getCoords
 
   !**********************************************
-  ! Group - getCoords
+  ! Group - getNumAtoms
   !**********************************************
 
-  subroutine printf(this)
+  function getNumAtoms(this) result(natoms)
+    class(group), intent(in) :: this
+    integer :: natoms
+    natoms = this%num_atoms
+  end function getNumAtoms
+
+  !**********************************************
+  ! Group - setAtomBendingAngleAt
+  !**********************************************
+
+  subroutine setAtomBendingAngleAt(this, pos, angle)
+    class(group), intent(inout) :: this
+    real(DP), intent(in) :: angle
+    integer, intent(in) :: pos
+
+    this%atoms(pos)%bending_angle = angle
+  end subroutine setAtomBendingAngleAt
+  !**********************************************
+  ! Group - printf interface
+  !**********************************************
+
+  subroutine printf_db(this)
     class(group), intent(in) :: this
     integer :: i
     integer :: iostat
     character(LEN=100) :: iomsg
 
-    write(*,*) 'natoms:', this%num_atoms, 'full:', this%full
+    !write(*,*) 'natoms:', this%num_atoms, 'full:', this%full
     do i=1, this%num_atoms
       call this%atoms(i)%writef(unit=6, iostat=iostat, iomsg=iomsg)
       if ( iostat /= 0 ) then
         write(*,*)'error:', iomsg
       end if
     end do
-  end subroutine printf
+  end subroutine printf_db
+
+  subroutine printf_rl(dtv, unit, iotype, v_list, iostat, iomsg)
+    class(group), intent(in) :: dtv
+    integer, intent(in)        :: unit      ! Internal unit to write to.
+    character(*), optional, intent(in)   :: iotype    ! LISTDIRECTED or DTxxx
+    integer, optional, intent(in)        :: v_list(:) ! parameters from fmt spec.
+    integer, intent(out)       :: iostat    ! non zero on error, etc.
+    character(*), intent(inout):: iomsg     ! define if iostat non zero.
+    integer :: i
+
+    do i=1, dtv%num_atoms
+      call dtv%atoms(i)%writef(unit=unit, iostat=iostat, iomsg=iomsg)
+      if ( iostat /= 0 ) then
+        write(*,*)'error:', iomsg
+      end if
+    end do
+  end subroutine printf_rl
+
 end module GROUP_MOD

@@ -55,7 +55,7 @@ program helix_param
   logical :: quiet
 
   ! * -- class atom --*
-  type(atom), save, allocatable:: ca_atoms(:)
+  !type(atom), save, allocatable:: ca_atoms(:)
   type(group) :: atomGroup
   ! * -- input format -- *
   ! 1. 1-6(A6): 'ATOM  '
@@ -171,29 +171,34 @@ program helix_param
 
   ! *-- load data --*
   atomGroup = io_readline(input_filename)
+  call atomGroup%printf()
+  natoms = atomGroup%getNumAtoms()
+  ncols = 3
+  points = atomGroup%getCoords()
 
-  open(unit=nin, file=input_filename, status='old', action='read', iostat=iostat)
-  if (iostat /= 0) then
-    print *, "Failed to open ",input_filename, "status:", iostat
-    close(unit=nin)
-    stop 
-  end if
-  ! *-- read size of the matrix: first line --*
-  read(nin, *) natoms, ncols
+!  open(unit=nin, file=input_filename, status='old', action='read', iostat=iostat)
+!  if (iostat /= 0) then
+!    print *, "Failed to open ",input_filename, "status:", iostat
+!    close(unit=nin)
+!    stop 
+!  end if
+!  ! *-- read size of the matrix: first line --*
+!  read(nin, *) natoms, ncols
+!
+!  ! *-- allocate memory --*
+!  allocate(points(natoms, 3), stat=AllocateStatus)
+!  if (AllocateStatus /= 0) stop 'Failed to allocate memory for points'
 
-  ! *-- allocate memory --*
-  allocate(points(natoms, ncols), stat=AllocateStatus)
-  if (AllocateStatus /= 0) stop 'Failed to allocate memory for points'
-
-  allocate(resname(natoms), stat=AllocateStatus)
-  if (AllocateStatus /= 0) stop 'Failed to allocate memory for resname'
-
-  allocate(resnum(natoms), stat=AllocateStatus)
-  if (AllocateStatus /= 0) stop 'Failed to allocate memory for resnum'
-
-  allocate(chId(natoms), stat=AllocateStatus)
-  if (AllocateStatus /= 0) stop 'Failed to allocate memory for chId'
-
+!
+!  allocate(resname(natoms), stat=AllocateStatus)
+!  if (AllocateStatus /= 0) stop 'Failed to allocate memory for resname'
+!
+!  allocate(resnum(natoms), stat=AllocateStatus)
+!  if (AllocateStatus /= 0) stop 'Failed to allocate memory for resnum'
+!
+!  allocate(chId(natoms), stat=AllocateStatus)
+!  if (AllocateStatus /= 0) stop 'Failed to allocate memory for chId'
+!
   allocate(angles(natoms-6), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for angles'
 
@@ -202,20 +207,20 @@ program helix_param
 
   allocate(helix_origins(natoms-2, ncols), stat=AllocateStatus)
   if (AllocateStatus /= 0) stop 'Failed to allocate memory for helix_origins'
-
-  allocate(ca_atoms(natoms), stat=AllocateStatus)
-  if (AllocateStatus /= 0) stop 'Failed to allocate memory for atoms'
-
-  do i=1, natoms
-    ! read line by line
-    read(nin, 10, iostat=iostat, iomsg=iomsg) recname, atNum, atName, altLoc, &
-                  resname(i), chId(i), resnum(i), iCode, &
-                  points(i, 1), points(i, 2), points(i, 3)
-    ca_atoms(i) = atom(recname=recname, atNum=atNum, name=atName, &
-                       altLoc=altLoc, resname=resname(i), chId=chId(i), &
-                       resnum=resnum(i), iCode=iCode, &
-                       x=points(i, 1), y=points(i, 2), z=points(i, 3))
-  end do
+!
+!  allocate(ca_atoms(natoms), stat=AllocateStatus)
+!  if (AllocateStatus /= 0) stop 'Failed to allocate memory for atoms'
+!
+!  do i=1, natoms
+!    ! read line by line
+!    read(nin, 10, iostat=iostat, iomsg=iomsg) recname, atNum, atName, altLoc, &
+!                  resname(i), chId(i), resnum(i), iCode, &
+!                  points(i, 1), points(i, 2), points(i, 3)
+!    ca_atoms(i) = atom(recname=recname, atNum=atNum, name=atName, &
+!                       altLoc=altLoc, resname=resname(i), chId=chId(i), &
+!                       resnum=resnum(i), iCode=iCode, &
+!                       x=points(i, 1), y=points(i, 2), z=points(i, 3))
+!  end do
 
   if (.not.(quiet)) then
     write(nout, *) 'Read input file: ', input_filename
@@ -223,7 +228,7 @@ program helix_param
     write(nout, '(A15,*(F8.3, 2X))') 'Reference axis', reference_axis(:)
   end if
   ! *-- close file --*
-  close(nin)
+!  close(nin)
 
   ! *-- fit --*
   call fit(points, angles, directions, helix_origins, &
@@ -231,7 +236,9 @@ program helix_param
            reference_axis=reference_axis, info=quiet)
   ! *-- save result --*
   do i=4, natoms - 3
-      ca_atoms(i)%bending_angle = angles(i-3)
+      !ca_atoms(i)%bending_angle = angles(i-3)
+      !atomGroup%atoms(i)%bending_angle = angles(i-3)
+      call atomGroup%setAtomBendingAngleAt(i, angles(i-3))
   end do
 
   ! *-- distance to upper --*
@@ -254,7 +261,9 @@ program helix_param
   write(fout, '(A, F12.3)') "Tilt angle w.r.t Reference axis:", tilt
 
   do i=1, natoms
-    call ca_atoms(i)%writef(unit=fout, iostat=iostat, iomsg=iomsg)
+    !call ca_atoms(i)%writef(unit=fout, iostat=iostat, iomsg=iomsg)
+    !call atomGroup%atoms(i)%writef(unit=fout, iostat=iostat, iomsg=iomsg)
+    call atomGroup%printf(unit=fout, iostat=iostat, iomsg=iomsg)
   end do
 
   if ( .not.(quiet) ) then
@@ -282,18 +291,18 @@ program helix_param
     if (DeAllocateStatus /= 0) stop 'Failed to release memory for helix_origins'
   end if
 
-  if(allocated(resname)) then
-    deallocate(resname, stat=DeAllocateStatus)
-    if (DeAllocateStatus /= 0) stop 'Failed to release memory for resname'
-  end if
-
-  if(allocated(resnum)) then
-    deallocate(resnum, stat=DeAllocateStatus)
-    if (DeAllocateStatus /= 0) stop 'Failed to release memory for resnum'
-  end if
-
-  if(allocated(chId)) then
-    deallocate(chId, stat=DeAllocateStatus)
-    if (DeAllocateStatus /= 0) stop 'Failed to release memory for chId'
-  end if
+!  if(allocated(resname)) then
+!    deallocate(resname, stat=DeAllocateStatus)
+!    if (DeAllocateStatus /= 0) stop 'Failed to release memory for resname'
+!  end if
+!
+!  if(allocated(resnum)) then
+!    deallocate(resnum, stat=DeAllocateStatus)
+!    if (DeAllocateStatus /= 0) stop 'Failed to release memory for resnum'
+!  end if
+!
+!  if(allocated(chId)) then
+!    deallocate(chId, stat=DeAllocateStatus)
+!    if (DeAllocateStatus /= 0) stop 'Failed to release memory for chId'
+!  end if
 end program helix_param
