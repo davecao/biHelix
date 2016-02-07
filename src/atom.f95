@@ -21,13 +21,30 @@ module ATOM_MOD
     real(DP):: bending_angle = 0.0
     real(DP):: d2top = 0.0
     real(DP):: d2bot = 0.0
+    ! *-- stride --*
+    ! keywaords:
+    ! extended --> secondary E
+    ! helix    --> secondary H
+    ! helix310 --> secondary G
+    ! helixpi  --> secondary I
+    ! turn     --> secondary T
+    ! bridge   --> secondary B
+    ! bend     --> secondary S
+    ! coil     --> secondary C
+    real(DP):: phi
+    real(DP):: psi
+    real(DP):: area
+    character(2):: ss
   contains
     ! operator
     !generic, public :: assignment(=) => assign
     !procedure, private :: assign
     ! type-bound procedures
     procedure :: getCoord
-
+    procedure :: getIdentifier
+    procedure :: distToDoubleMem
+    procedure :: distToSingleMem
+    generic, public:: setDistToMem=>distToDoubleMem, distToSingleMem
     !procedure :: readline
     !generic, public :: read => readline
 
@@ -56,8 +73,10 @@ contains
   !**********************************************
 
   function new_atom(recname, name, atNum, resname, resnum, chId, &
-                    iCode, altLoc, x, y, z)
+                    iCode, altLoc, x, y, z, phi, psi, area, ss)
     real(DP), intent(in):: x, y, z
+    real(DP), intent(in):: phi, psi, area
+    character(*), intent(in) :: ss
     character(*), intent(in):: recname, name
     character(3), intent(in):: resname
     character, intent(in):: chId, iCode, altLoc
@@ -75,9 +94,13 @@ contains
     new_atom%x = x
     new_atom%y = y
     new_atom%z = z
+    new_atom%phi = phi
+    new_atom%psi = psi
+    new_atom%area = area
+    new_atom%ss = ss
     new_atom%bending_angle = 0.0
-    new_atom%d2top = 0.0
-    new_atom%d2bot = 0.0
+    new_atom%d2top = 999.0
+    new_atom%d2bot = 999.0
   end function new_atom
 
   !***********************************************
@@ -128,11 +151,12 @@ contains
     integer, intent(out)       :: iostat    ! non zero on error, etc.
     character(*), intent(inout):: iomsg     ! define if iostat non zero.
 
-20 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3)
+20 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3,A2)
     write(unit=unit, fmt=20, IOSTAT=iostat,IOMSG=iomsg) dtv%recname, dtv%atNum, &
                     dtv%name, dtv%altLoc, dtv%resname, dtv%chId, dtv%resnum, &
                     dtv%iCode, dtv%x, dtv%y, dtv%z, &
-                    dtv%bending_angle, dtv%d2top, dtv%d2bot
+                    dtv%bending_angle, dtv%d2top, dtv%d2bot, &
+                    dtv%phi, dtv%psi, dtv%area, dtv%ss
 
   end subroutine writef
 
@@ -150,4 +174,60 @@ contains
   end function getCoord
 
 
+  !*********************************************
+  ! Atom - getIdentifier
+  ! Return a string, resname resnum chId
+  !*********************************************
+
+  function getIdentifier(this) result(atId)
+    class(atom), intent(in):: this
+    character(len=80), allocatable :: atId
+    character(len=80) :: identifier
+    write(identifier,'(I5,1X,A3,1X,A1)') this%resnum, this%resname, this%chId
+    atId = adjustl(trim(identifier))
+  end function getIdentifier
+
+  !*********************************************
+  ! Atom - distToSingleMem
+  !*********************************************
+
+  subroutine distToSingleMem(this, center, normal, label)
+    class(atom), intent(inout):: this
+    real(DP), dimension(3), intent(in) :: center
+    real(DP), dimension(3), intent(in) :: normal
+    integer, intent(in) :: label
+    real(DP), dimension(3) :: coords
+    real(DP), dimension(3) :: normal_vec
+    real(DP) :: dist
+    ! label 0 --> upper
+    ! label 1 --> lower
+    normal_vec = normal/norm2(normal)
+
+    coords = this%getCoord()
+    dist = dot_product(coords - center, normal_vec)
+    if (label == 0) then
+      this%d2top = dist
+    else if (label == 1) then
+      this%d2bot = dist
+    else
+      stop "setDistToMem: label should be 0 or 1"
+    end if
+  end subroutine distToSingleMem
+  !*********************************************
+  ! Atom - distToDoubleMem
+  !*********************************************
+
+  subroutine distToDoubleMem(this, up_center, up_norm, low_center, low_norm)
+    class(atom), intent(inout):: this
+    real(DP), dimension(3), intent(in) :: up_center
+    real(DP), dimension(3), intent(in) :: up_norm
+    real(DP), dimension(3), intent(in) :: low_center
+    real(DP), dimension(3), intent(in) :: low_norm
+    real(DP), dimension(3) :: normal_vec
+    normal_vec = up_norm/norm2(up_norm)
+
+    call this%distToSingleMem(center=up_center, normal=normal_vec, label=0)
+    normal_vec = low_norm/norm2(low_norm)
+    call this%distToSingleMem(center=low_center, normal=normal_vec, label=1)
+  end subroutine distToDoubleMem
 end module ATOM_MOD

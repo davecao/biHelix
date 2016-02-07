@@ -9,9 +9,10 @@ SET(HPSRC   ${SRC}/cla.f95
             ${SRC}/precision.f95
             ${SRC}/interp_hel.f95
             ${SRC}/io.f95
+            ${SRC}/desp.f95
+            ${SRC}/mem_mod.f95
             ${SRC}/atom.f95
             ${SRC}/group.f95
-            ${SRC}/pdblib.f95
             ${SRC}/utilities.f95
             ${SRC}/linalg.f95
             ${SRC}/helanal.f95

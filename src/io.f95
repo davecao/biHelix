@@ -13,6 +13,10 @@
 ! 11. 31-38(F8.3): x of CA: x coordinate of CA
 ! 12. 39-46(F8.3): y of CA: y coordinate of CA
 ! 13. 47-54(F8.3): z of CA: z coordinate of CA
+! 14. 55-62(F8.3): phi of the residue
+! 15. 63-70(F8.3): psi of the residue
+! 16. 71-78(F8.3): area of the residue
+! 17. 79-80(A2): type of the secondary structure(by Stride)
 ! *--------------------*
 ! 10 format(A6,I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
 !
@@ -51,6 +55,8 @@ contains
     integer :: atNum = 0
     integer :: resnum = 0
     real(DP) :: x, y, z
+    real(DP) :: phi, psi, area
+    character(len=2) :: stype
     character(len=3) :: resname
     character(6) :: recname = 'ATOM'
     character(4) :: atName
@@ -58,16 +64,18 @@ contains
     character(len=40) :: cls
     character(len=9) :: depDate
     character(len=4) :: idCode
+    logical :: hasUpper = .FALSE.
+    logical :: hasLower = .FALSE.
 
     !class(group), allocatable :: group_obj
     type(group):: group_obj
     type(atom) :: atom_obj
-10 format(I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3)
+10 format(I5,1x,A4,A1,A3,1x,A1,I4,A1,3x,f8.3,f8.3,f8.3,f8.3,f8.3,f8.3,A2)
 20 format(4x,A40,A9,3x,A4)
     ! create a group of atoms: initialize with 10 atoms
     group_obj = group(10)
     ! open files
-    open(fh, file=filename)
+    open(fh, file=filename, status='old', action='read')
     ! ios is negative if an end of record condition is encountered or if
     ! an endfile condition was detected.  It is positive if an error was
     ! detected.  ios is zero otherwise.
@@ -87,19 +95,36 @@ contains
           case ('ATOM  ')
             read(buffer, 10, iostat=ios) atNum, atName, altLoc, resname, &
                                          chId, resnum, iCode, &
-                                         x, y, z
+                                         x, y, z, phi, psi, area, stype
             atom_obj = atom(recname=recname, atNum=atNum, name=atName, &
                           altLoc=altLoc, resname=resname, chId=chId, &
                           resnum=resnum, iCode=iCode, &
-                          x=x, y=y, z=z)
+                          x=x, y=y, z=z, phi=phi, psi=psi, area=area, &
+                          ss=stype)
             call group_obj%add(atom_obj)
           case ('REFAXS')
-            !read(buffer,'(1x,f8.3,f8.3,f8.3)') 
+            !read(buffer,'(1x,f8.3,f8.3,f8.3)')
+          case ('MEMUPP')
+            ! membrane upper center
+            read(buffer,'(1x,3f8.3)') group_obj%mem_info%upcenter(1:3)
+          case ('MEMUNM')
+            ! membrane upper normal
+            read(buffer,'(1x,3f8.3)') group_obj%mem_info%upNormVec(1:3)
+            hasUpper = .TRUE.
+          case ('MEMLOW')
+            ! membrane lower center
+            read(buffer,'(1x,3f8.3)') group_obj%mem_info%lowcenter(1:3)
+          case ('MEMLNM')
+            ! membrane lower normal
+            read(buffer,'(1x,3f8.3)') group_obj%mem_info%lowNormVec(1:3)
+            hasLower = .TRUE.
           case default
         end select
       end if
     end do
+    call group_obj%setMemLayerNum(hasUpper=hasUpper, hasLower=hasLower)
     ! close file
     close(fh)
   end function readline
+
 end module io

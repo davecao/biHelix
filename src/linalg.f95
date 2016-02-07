@@ -398,11 +398,11 @@ contains
     v1 = a / norm2(a)
     v2 = b / norm2(b)
     angle_rad = dot_product(v1, v2)
-
-    if (angle .le. -1) then 
-      angle_rad = -1
-    else if(angle .gt. 1) then
-      angle_rad = 1
+    ! *-- clip [-1.0, 1.0]
+    if (angle_rad <= -1.0d0) then 
+      angle_rad = -1.0d0
+    else if(angle_rad >= 1.0d0) then
+      angle_rad = 1.0d0
     else
     end if
     angle = acos(angle_rad)  ! in radians

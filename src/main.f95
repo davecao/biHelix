@@ -21,18 +21,20 @@ program helix_param
   real(DP), dimension(:, :), save, allocatable:: points
   real(DP), dimension(:), save, allocatable:: angles
 
-  real(DP), dimension(3) :: reference_axis = (/0.0, 0.0, 1.0/)
-  real(DP), dimension(3) :: upper = (/0.0, 0.0, 0.0/)
-  real(DP), dimension(3) :: lower = (/0.0, 0.0, 0.0/)
-  real(DP), dimension(3) :: mem_normal = (/0.0, 0.0, 0.0/)
-  character(len=STRLEN) :: axis_str
-  character(len=STRLEN), dimension(3) :: tokens
-  integer :: ntokens
+  real(DP), dimension(3) :: reference_axis = (/999.0, 0.0, 0.0/)
+  real(DP), dimension(3) :: helix_axis = (/999.0, 0.0, 0.0/)
+  !real(DP), dimension(3) :: upper = (/999.0, 0.0, 0.0/)
+  !real(DP), dimension(3) :: lower = (/999.0, 0.0, 0.0/)
+  !real(DP), dimension(3) :: mem_normal = (/0.0, 0.0, 0.0/)
+  !character(len=STRLEN) :: axis_str
+  !character(len=STRLEN), dimension(3) :: tokens
+  !integer :: ntokens
   integer :: natoms, ncols, i, AllocateStatus, DeAllocateStatus
 
   !integer :: nin = 50
   !integer :: nout = 6 ! to screen
-  integer, parameter :: fout = 99! to file
+  integer, parameter :: fout = 99 ! to file
+  integer :: natoms_threshold = 7 ! At least 7 a.a. is needed.
   integer :: iostat
   character(LEN=100) :: iomsg
 
@@ -55,9 +57,9 @@ program helix_param
   !(compact, form)
   call cla_register('-i', '--in', 'The input file name.', cla_char, 'required')
   call cla_register('-o', '--out', 'The output file name.', cla_char, 'helix_out.txt')
-  call cla_register('-r', '--ref', 'x, y, z of a reference axis.', cla_char, '0.0, 0.0, 1.0')
-  call cla_register('-u', '--upper', 'The center of the upper bilayer.', cla_char, '0.0, 0.0, 15.0')
-  call cla_register('-l', '--lower', 'The center of the lower bilayer.', cla_char, '0.0, 0.0, -15.0')
+!  call cla_register('-r', '--ref', 'x, y, z of a reference axis.', cla_char, '0.0, 0.0, 1.0')
+!  call cla_register('-u', '--upper', 'The center of the upper bilayer.', cla_char, '0.0, 0.0, 15.0')
+!  call cla_register('-l', '--lower', 'The center of the lower bilayer.', cla_char, '0.0, 0.0, -15.0')
   call cla_register('-q', '--quiet', 'Only output to file.', cla_flag, 'q')
   call cla_register('-v', '--verbose', 'write more to file.', cla_flag, 'v')
 
@@ -72,32 +74,32 @@ program helix_param
     stop
   end if
   ! -------- -r input_filename ------------
-  flag = cla_key_present('-r')
-  if (flag) then
-    call cla_get('-r', axis_str)
-    call parse(axis_str, ',', tokens, ntokens)
-    do i=1, ntokens
-      read(tokens(i), '(F8.3)') reference_axis(i)
-    end do
-  end if
-  ! -------- -u input_filename ------------
-  flag = cla_key_present('-u')
-  if (flag) then
-    call cla_get('-u', axis_str)
-    call parse(axis_str, ',', tokens, ntokens)
-    do i=1, ntokens
-      read(tokens(i), '(F8.3)') upper(i)
-    end do
-  end if
-  ! -------- -l input_filename ------------
-  flag = cla_key_present('-l')
-  if (flag) then
-    call cla_get('-l', axis_str)
-    call parse(axis_str, ',', tokens, ntokens)
-    do i=1, ntokens
-      read(tokens(i), '(F8.3)') lower(i)
-    end do
-  end if
+!  flag = cla_key_present('-r')
+!  if (flag) then
+!    call cla_get('-r', axis_str)
+!    call parse(axis_str, ',', tokens, ntokens)
+!    do i=1, ntokens
+!      read(tokens(i), '(F8.3)') reference_axis(i)
+!    end do
+!  end if
+!  ! -------- -u input_filename ------------
+!  flag = cla_key_present('-u')
+!  if (flag) then
+!    call cla_get('-u', axis_str)
+!    call parse(axis_str, ',', tokens, ntokens)
+!    do i=1, ntokens
+!      read(tokens(i), '(F8.3)') upper(i)
+!    end do
+!  end if
+!  ! -------- -l input_filename ------------
+!  flag = cla_key_present('-l')
+!  if (flag) then
+!    call cla_get('-l', axis_str)
+!    call parse(axis_str, ',', tokens, ntokens)
+!    do i=1, ntokens
+!      read(tokens(i), '(F8.3)') lower(i)
+!    end do
+!  end if
   ! -------- -o output_filename -----------
   flag = cla_key_present('-o')
   if (flag) then
@@ -122,11 +124,16 @@ program helix_param
 
   ! *-- load data --*
   atomGroup = io_readline(input_filename)
-  atomGroup%reference_axis = reference_axis
-  atomGroup%upper = upper
-  atomGroup%lower = lower
-  atomGroup%mem_normal = mem_normal
+  reference_axis = atomGroup%getReferenceAxis()
+  !atomGroup%reference_axis = reference_axis
+  !atomGroup%mem_info%upcenter = upper
+  !atomGroup%mem_info%lowcenter = lower
+  !atomGroup%mem_normal = upper - lower
   natoms = atomGroup%getNumAtoms()
+  if (natoms < natoms_threshold) then
+    print *, input_filename, " - ",natoms, " atoms: # of CA atoms is >=7 a.a."
+    stop
+  end if
   ncols = 3
   points = atomGroup%getCoords()
 
@@ -144,9 +151,10 @@ program helix_param
     write(stdout, '("natoms:",I6," ncols:",I6)') size(points, 1), size(points, 2)
     write(stdout, '(A15,*(F8.3, 2X))') 'Reference axis', reference_axis(:)
   end if
-
+  ! *-- set distance to the membrane --*
+  call atomGroup%findDistToMem() 
   ! *-- fit --*
-  call fit(points, angles, directions, helix_origins, &
+  call fit(points, angles, directions, helix_origins, helix_axis, &
            tilt, reference_axis=reference_axis, info=quiet)
   ! *-- save result --*
   do i=4, natoms - 3
@@ -154,10 +162,8 @@ program helix_param
   end do
   atomGroup%directions = directions
   atomGroup%helix_origins = helix_origins
+  atomGroup%helix_axis = helix_axis
   atomGroup%tilt = tilt
-  call atomGroup%printf()
-  ! *-- distance to upper --*
-  !do i=1, natoms
 
   if (.not.(quiet)) then
     write(*, *) 'Scanning finished.'
@@ -165,10 +171,11 @@ program helix_param
 
   ! *---- write to file ----
   open(fout, file=output_filename, status='replace', action='write')
-  call atomGroup%printf(fout)
-  close(fout, iostat=iostat, iomsg=iomsg, status="delete")
-  if ( iostat /= 0 ) write(*, *) "Error closing file: ", iomsg
 
+  call atomGroup%printf(fout)
+  close(fout, iostat=iostat, iomsg=iomsg, status="keep")
+  if ( iostat /= 0 ) write(*, *) "Error closing file: ", iomsg
+  
   if ( .not.(quiet) ) then
     write(*, *) 'Finish writting.'
   end if

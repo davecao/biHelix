@@ -25,6 +25,8 @@ module GROUP_MOD
   !****************
   use precision
   use atom_mod
+  use mem_mod
+  use desp_mod
   use utilities, only:report
   implicit none ! use strong type
 
@@ -40,21 +42,25 @@ module GROUP_MOD
     real(DP), public, allocatable:: directions(:, :)
     real(DP), public, allocatable:: helix_origins(:, :)
     real(DP), public :: tilt
-    real(DP), public, dimension(3) :: reference_axis
-    real(DP), public, dimension(3) :: upper
-    real(DP), public, dimension(3) :: lower
-    real(DP), public, dimension(3) :: mem_normal
+    real(DP), public, dimension(3) :: reference_axis, helix_axis
+    type(membraneInfo), public :: mem_info
+
+    !real(DP), public, dimension(3) :: upper
+    !real(DP), public, dimension(3) :: lower
+    !real(DP), public, dimension(3) :: mem_normal
     character(4), public :: idCode                    ! HEADER
     character(40), public :: classification           ! HEADER
     character(9), public :: depDate                   ! HEADER
     type(atom), dimension(:), allocatable :: atoms    ! ATOM
-
   contains
     procedure :: add
     procedure :: getCoords
     procedure :: resize => reallocate
     procedure :: getNumAtoms
+    procedure :: getReferenceAxis
+    procedure :: findDistToMem
     procedure :: setAtomBendingAngleAt
+    procedure :: setMemLayerNum
     procedure :: printf_db ! for debug
     procedure :: printf_rl ! for both screen and file
     generic :: printf => printf_db, printf_rl
@@ -65,7 +71,7 @@ module GROUP_MOD
   end interface group
 
 contains
-    !**********************************************
+  !**********************************************
   ! Group Constructor
   !**********************************************
 
@@ -83,10 +89,22 @@ contains
     allocate(new_group%atoms(init_natoms), stat=AllocateStatus)
     if (AllocateStatus /= 0) stop 'Failed to allocate memory for atoms'
     new_group%reference_axis = (/0.0, 0.0, 1.0/)
-    new_group%upper = (/0.0, 0.0, 0.0/)
-    new_group%lower = (/0.0, 0.0, 0.0/)
-    new_group%mem_normal = (/0.0, 0.0, 0.0/)
+    new_group%mem_info%upcenter = (/999.0, 0.0, 0.0/)
+    new_group%mem_info%lowcenter = (/999.0, 0.0, 0.0/)
+    new_group%mem_info%upNormVec = (/999.0, 0.0, 0.0/)
+    new_group%mem_info%lowNormVec = (/999.0, 0.0, 0.0/)
+    new_group%helix_axis = (/999.0, 0.0, 0.0/)
   end function new_group
+
+  !**********************************************
+  ! Group - getReferenceAxis
+  !**********************************************
+
+  function getReferenceAxis(this) result(ref_ax)
+    class(group), intent(in) :: this
+    real(DP), dimension(3) :: ref_ax
+    ref_ax = this%mem_info%getRefAxis()
+  end function getReferenceAxis
 
   !**********************************************
   ! Group - realloc the objects of Atom
@@ -113,6 +131,7 @@ contains
     this%full = fsize
     !deallocate(tmp)
   end subroutine reallocate
+
   !**********************************************
   ! Group - add
   !**********************************************
@@ -130,6 +149,7 @@ contains
     this%atoms(natoms+1) = atom_obj
     this%num_atoms = natoms + 1
   end subroutine
+
   !**********************************************
   ! Group - getCoords
   !**********************************************
@@ -167,6 +187,46 @@ contains
 
     this%atoms(pos)%bending_angle = angle
   end subroutine setAtomBendingAngleAt
+
+  !**********************************************
+  ! Group - setMemLayerNum
+  !**********************************************
+
+  subroutine setMemLayerNum(this, hasUpper, hasLower)
+    class(group), intent(inout) :: this
+    logical, intent(in) :: hasUpper, hasLower
+    call this%mem_info%setLayerNum(hasUpper=hasUpper, hasLower=hasLower)
+  end subroutine setMemLayerNum
+  !**********************************************
+  ! Group - findDistToMem
+  !**********************************************
+
+  subroutine findDistToMem(this)
+    class(group), intent(inout) :: this
+    integer :: natoms, i
+    natoms = this%num_atoms
+
+    if (this%mem_info%doubleLayers) then
+      caloop: do i=1, natoms
+        call this%atoms(i)%setDistToMem(this%mem_info%upcenter, &
+                                   this%mem_info%upNormVec, &
+                                   this%mem_info%lowcenter, &
+                                   this%mem_info%lowNormVec)
+      end do caloop
+    else if (this%mem_info%upperOnly) then
+      do i=1, natoms
+        call this%atoms(i)%setDistToMem(this%mem_info%upcenter, &
+                                   this%mem_info%upNormVec, 0)
+      end do
+    else if (this%mem_info%lowerOnly) then
+      do i=1, natoms
+        call this%atoms(i)%setDistToMem(this%mem_info%lowcenter, &
+                                   this%mem_info%lowNormVec, 1)
+      end do
+    else
+    end if
+  end subroutine findDistToMem
+
   !**********************************************
   ! Group - printf interface
   !**********************************************
@@ -182,9 +242,14 @@ contains
     call report(this%directions, nout=unit, msg="Directions:")
     call report(this%helix_origins, nout=unit, msg="Helix origins:")
     call report(this%reference_axis, nout=unit, msg="Reference axis:")
-    call report(this%upper, nout=unit, msg="The center of upper layer:")
-    call report(this%lower, nout=unit, msg="The center of lower layer:")
+
+    call report(this%mem_info%upcenter, nout=unit, msg="The center of upper layer:")
+    call report(this%mem_info%lowcenter, nout=unit, msg="The center of lower layer:")
+    call report(this%mem_info%upNormVec, nout=unit, msg="The normal of upper layer:")
+    call report(this%mem_info%lowNormVec, nout=unit, msg="The normal of lower layer:")
+
     write(unit, '(A, F12.3)') "Tilt angle w.r.t Reference axis:", this%tilt
+
     !write(*,*) 'natoms:', this%num_atoms, 'full:', this%full
     do i=1, this%num_atoms
       call this%atoms(i)%writef(unit=unit, iostat=iostat, iomsg=iomsg)
@@ -199,17 +264,41 @@ contains
     integer, intent(in) :: fp
     integer :: iostat    ! non zero on error, etc.
     character(LEN=100) :: iomsg     ! define if iostat non zero.
+    character(len=80) :: st1, ed1
     integer :: i
-
+    call glue(fp, "REM   ")
     write(fp,'(A6,4x,A40,A9,3x,A4)') "HEADER", this%classification, &
                                      this%depDate, this%idCode
     ! *-- write parameters --*
-    call report(this%directions, fp, msg="Directions:")
-    call report(this%helix_origins, fp, msg="Helix origins:")
-    call report(this%reference_axis, fp, msg="Reference axis:")
-    call report(this%upper, fp, msg="The center of upper layer:")
-    call report(this%lower, fp, msg="The center of lower layer:")
-    write(fp, '(A, F12.3)') "Tilt angle w.r.t Reference axis:", this%tilt
+    write(fp, '(A6,1x,3F8.3)') 'REFAXS', this%reference_axis
+    write(fp, '(A6,1x,3F8.3)') 'MEMUPP', this%mem_info%upcenter
+    write(fp, '(A6,1x,3F8.3)') 'MEMUNM', this%mem_info%upNormVec
+    write(fp, '(A6,1x,3F8.3)') 'MEMLOW', this%mem_info%lowcenter
+    write(fp, '(A6,1x,3F8.3)') 'MEMLNM', this%mem_info%lowNormVec
+
+    do i=1, size(this%directions, 1)
+      st1 = this%atoms(i)%getIdentifier()
+      ed1 = this%atoms(i+3)%getIdentifier()
+      write(fp, '(A6,1x,A,A3,A,3X,3F8.3)') 'DIRECT', trim(st1), " - ", &
+                trim(ed1), this%directions(i,:)
+    end do
+    do i=1,size(this%helix_origins, 1)
+      st1 = this%atoms(i)%getIdentifier()
+      ed1 = this%atoms(i+1)%getIdentifier()
+      write(fp, '(A6,1x,A,A3,A,3X,3F8.3)') 'HELORG', trim(st1), " - ", &
+                trim(ed1), this%helix_origins(i,:)
+    end do
+    write(fp, '(A6, 1x, 3F12.3)') "HELAXS", this%helix_axis
+    write(fp, '(A6, 1x, F12.3)') "TILANG", this%tilt
+    !call report(this%directions, nout=fp, msg="Directions:")
+    !call report(this%helix_origins, nout=fp, msg="Helix origins:")
+    !call report(this%reference_axis, nout=fp, msg="Reference axis:")
+
+    !call report(this%mem_info%upcenter, nout=fp, msg="The center of upper layer:")
+    !call report(this%mem_info%lowcenter, nout=fp, msg="The center of lower layer:")
+    !call report(this%mem_info%upNormVec, nout=fp, msg="The normal of upper layer:")
+    !call report(this%mem_info%lowNormVec, nout=fp, msg="The normal of lower layer:")
+    
 
     ! *-- write data --*
     do i=1, this%num_atoms
@@ -218,6 +307,7 @@ contains
         write(*,*)'error:', iomsg
       end if
     end do
+
     ! *-- close file ---
   end subroutine printf_rl
 

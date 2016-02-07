@@ -428,16 +428,15 @@ contains
   !   rmsdl (real(DP)):
   !   r2 (real(DP)) : estimated radius
   !*****************************************************************************
-  subroutine fit(points, bending_angles, directions, origins, &
+  subroutine fit(points, bending_angles, directions, origins, axvec, &
                  tilt, reference_axis, info)
-
     !             tilt, radc, rmsdc, rmsdl, r2, &
     !             reference_axis, info)
     !integer, parameter :: SP = kind(1.0)
     !integer, parameter :: DP = kind(1.0d0)
 
     real(DP),  intent(in):: points(:, :)
-    real(DP), intent(out):: bending_angles(:)
+    real(DP), intent(out):: bending_angles(:), axvec(:)
     real(DP), intent(out):: directions(:, :), origins(:, :)
     real(DP), intent(out):: tilt
     real(DP), optional, intent(in):: reference_axis(:)
@@ -448,7 +447,7 @@ contains
     
     ! *-- local variables --*
     logical :: quiet = .FALSE.
-    real(DP):: direct(3), axvec(3)
+    real(DP):: direct(3)
     real(DP):: origin(2, 3)
     real(DP) :: twist, height, angle, tmp, bend2
     real(DP) :: ave, var, sdev, mean_abs_std, max_angle
