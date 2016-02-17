@@ -47,6 +47,7 @@ program helix_param
   ! *-- cla variables --*
   character(len=STRLEN) :: input_filename, output_filename
   logical :: flag, verbose
+  logical :: kinkOnly
   logical :: quiet
 
   ! * -- class atom --*
@@ -60,6 +61,7 @@ program helix_param
 !  call cla_register('-r', '--ref', 'x, y, z of a reference axis.', cla_char, '0.0, 0.0, 1.0')
 !  call cla_register('-u', '--upper', 'The center of the upper bilayer.', cla_char, '0.0, 0.0, 15.0')
 !  call cla_register('-l', '--lower', 'The center of the lower bilayer.', cla_char, '0.0, 0.0, -15.0')
+  call cla_register('-k', '--kink', 'Only calculate the kinks.', cla_flag, 'k')
   call cla_register('-q', '--quiet', 'Only output to file.', cla_flag, 'q')
   call cla_register('-v', '--verbose', 'write more to file.', cla_flag, 'v')
 
@@ -114,6 +116,13 @@ program helix_param
   else
     quiet = .FALSE.
   endif
+  ! -------- -s only to screen -----------
+  flag = cla_key_present('-k')
+  if (flag) then
+    kinkOnly = .TRUE.
+  else
+    kinkOnly = .FALSE.
+  endif
   ! -------- -v verbose --------------------
   flag = cla_key_present('-v')
   if (flag) then
@@ -123,8 +132,10 @@ program helix_param
   endif
 
   ! *-- load data --*
-  atomGroup = io_readline(input_filename)
-  reference_axis = atomGroup%getReferenceAxis()
+  atomGroup = io_readline(input_filename, kinkOnly)
+  if (.not. kinkOnly) then
+    reference_axis = atomGroup%getReferenceAxis()
+  end if
   !atomGroup%reference_axis = reference_axis
   !atomGroup%mem_info%upcenter = upper
   !atomGroup%mem_info%lowcenter = lower
@@ -152,7 +163,9 @@ program helix_param
     write(stdout, '(A15,*(F8.3, 2X))') 'Reference axis', reference_axis(:)
   end if
   ! *-- set distance to the membrane --*
-  call atomGroup%findDistToMem() 
+  if(.not. kinkOnly) then
+    call atomGroup%findDistToMem()
+  end if
   ! *-- fit --*
   call fit(points, angles, directions, helix_origins, helix_axis, &
            tilt, reference_axis=reference_axis, info=quiet)

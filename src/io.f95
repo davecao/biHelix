@@ -45,8 +45,9 @@ module io
   public :: readline
 
 contains
-  function readline(filename) result(group_obj)
+  function readline(filename, kinkOnly) result(group_obj)
     character(*), intent(in) :: filename
+    logical, intent(in) :: kinkOnly
     character(len=100) :: buffer, label
     integer, parameter :: fh = 15
     integer :: pos = 6
@@ -122,7 +123,9 @@ contains
         end select
       end if
     end do
-    call group_obj%setMemLayerNum(hasUpper=hasUpper, hasLower=hasLower)
+    if (.not.kinkOnly) then
+      call group_obj%setMemLayerNum(hasUpper=hasUpper, hasLower=hasLower)
+    end if
     ! close file
     close(fh)
   end function readline
