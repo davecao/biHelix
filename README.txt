@@ -53,10 +53,12 @@ General usage:
 Also, -?, -h, -H, -help, --help, and --usage are recognized.
 
 
- Input format
- -------------
- see ATOM section used in PDB format
+Input format
+-------------
+
+see ATOM section used in PDB format
 
 Output format
 --------------
- see ATOM section used in PDB format.
+
+see ATOM section used in PDB format.
