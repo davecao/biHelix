@@ -41,7 +41,7 @@ General usage:
 
     biHelix [-i=required] [-o=helix_out.txt] [-k] [-q] [-v]  
 
-  Options and flags {default values}:
+Options and flags {default values}:
     -i, --in:    The input file name.  {required}
     -o, --out:    The output file name.  {helix_out.txt}
     -k, --kink:    Only calculate the kinks.
