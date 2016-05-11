@@ -19,3 +19,6 @@
 
     for f in `ls segments/*.pdb | sed 's/.pdb//g'`;do fn=`basename $f`;../biHelix/bin/biHelix -i $f.pdb -q -k -o results/$fn._bihelix.pdb; done
 
+#### Test the correctness by a standard straight alpha helix
+
+   ../biHelix/bin/biHelix -i helix_ca.pdb -k
