@@ -12,9 +12,7 @@ to find the helical axis.
 Reference:
  Kumar, S. and Bansal, M. (1996). Structural and Sequence Characteristics of Long Alpha Helices in Globular Proteins. Biophysical J.,71, 1574-1586.
 
- Sugeta H, Miyazawa T. General method for calculating helical parameters of
-polymer chains from bond lengths, bond angles, and internal-rotation angles.
-Biopolymers. 1967;5: 673–679.
+ Sugeta H, Miyazawa T. General method for calculating helical parameters of polymer chains from bond lengths, bond angles, and internal-rotation angles. Biopolymers. 1967;5: 673–679.
 
 Prerequisites
 -------------
