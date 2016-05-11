@@ -27,9 +27,9 @@ Prerequisites
 Compilation
 ------------
 
-    cmake ../biHex
+    cmake ../biHex  
 
-    make
+    make  
 
 
 The executable file will be generated and saved to the bin directory;
@@ -39,7 +39,7 @@ Command line arguments
 
 General usage:
 
-    biHelix [-i=required] [-o=helix_out.txt] [-k] [-q] [-v]
+    biHelix [-i=required] [-o=helix_out.txt] [-k] [-q] [-v]  
 
   Options and flags {default values}:
     -i, --in:    The input file name.  {required}
@@ -55,10 +55,8 @@ Also, -?, -h, -H, -help, --help, and --usage are recognized.
 
 Input format
 -------------
-
-see ATOM section used in PDB format
+ see ATOM section used in PDB format
 
 Output format
 --------------
-
-see ATOM section used in PDB format.
+ see ATOM section used in PDB format.
