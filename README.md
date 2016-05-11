@@ -43,15 +43,16 @@ Options and flags {default values}:
 
     -o, --out:    The output file name.  {helix_out.txt}
 
-    -k                   --kink:    Only calculate the kinks.
+    -k, --kink:    Only calculate the kinks.
 
-    -q                  --quiet:    Only output to file.
+    -q, --quiet:    Only output to file.
 
-    -v                --verbose:    write more to file.
+    -v, --verbose:    write more to file.
 
 Positional arguments: None
 
 Also, -?, -h, -H, -help, --help, and --usage are recognized.
+
 
  Input format
  -------------
