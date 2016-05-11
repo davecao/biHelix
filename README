@@ -10,8 +10,7 @@ Singular Value Decomposition is employed other than matrix inverse in helanal
 to find the helical axis.
 
 Reference:
- Kumar, S. and Bansal, M. (1996). Structural and Sequence Characteristics
-of Long Alpha Helices in Globular Proteins. Biophysical J.,71, 1574-1586.
+ Kumar, S. and Bansal, M. (1996). Structural and Sequence Characteristics of Long Alpha Helices in Globular Proteins. Biophysical J.,71, 1574-1586.
 
  Sugeta H, Miyazawa T. General method for calculating helical parameters of
 polymer chains from bond lengths, bond angles, and internal-rotation angles.
@@ -42,11 +41,11 @@ General usage:
     biHelix [-i=required] [-o=helix_out.txt] [-k] [-q] [-v]  
 
 Options and flags {default values}:
-    -i, --in:    The input file name.  {required}
-    -o, --out:    The output file name.  {helix_out.txt}
-    -k, --kink:    Only calculate the kinks.
-    -q, --quiet:    Only output to file.
-    -v, --verbose:    write more to file.
+    -i, --in    The input file name.  {required}  
+    -o, --out    The output file name.  {helix_out.txt}
+    -k, --kink    Only calculate the kinks.
+    -q, --quiet    Only output to file.
+    -v, --verbose    write more to file.
 
   Positional arguments: None
 
