@@ -1,0 +1,486 @@
+REM  --------------------------------------------------------------------  4ZOW
+REM                                                                        4ZOW
+REM  STRIDE: Knowledge-based secondary structure assignment                4ZOW
+REM  Please cite: D.Frishman & P.Argos, Proteins XX, XXX-XXX, 1995         4ZOW
+REM                                                                        4ZOW
+REM  Residue accessible surface area calculation                           4ZOW
+REM  Please cite: F.Eisenhaber & P.Argos, J.Comp.Chem. 14, 1272-1280, 1993 4ZOW
+REM               F.Eisenhaber et al., J.Comp.Chem., 1994, submitted       4ZOW
+REM                                                                        4ZOW
+REM  ------------------------ General information -----------------------  4ZOW
+REM                                                                        4ZOW
+HDR  TRANSPORT PROTEIN                       07-MAY-15   4ZOW              4ZOW
+CMP  MOL_ID: 1;                                                            4ZOW
+CMP   MOLECULE: MULTIDRUG TRANSPORTER MDFA;                                4ZOW
+CMP   CHAIN: A;                                                            4ZOW
+CMP   FRAGMENT: UNP RESIDUES 10-400;                                       4ZOW
+CMP   SYNONYM: CHLORAMPHENICOL RESISTANCE PUMP CMR;                        4ZOW
+CMP   ENGINEERED: YES;                                                     4ZOW
+CMP   MUTATION: YES                                                        4ZOW
+SRC  MOL_ID: 1;                                                            4ZOW
+SRC   ORGANISM_SCIENTIFIC: ESCHERICHIA COLI (STRAIN K12);                  4ZOW
+SRC   ORGANISM_TAXID: 83333;                                               4ZOW
+SRC   STRAIN: K12;                                                         4ZOW
+SRC   GENE: MDFA, CMLA, CMR, B0842, JW0826;                                4ZOW
+SRC   EXPRESSION_SYSTEM: ESCHERICHIA COLI 'BL21-GOLD(DE3)PLYSS AG'         4ZOW
+SRC   EXPRESSION_SYSTEM_TAXID: 866768                                      4ZOW
+AUT  X.C.ZHANG,J.HENG,Y.ZHAO,X.WANG                                        4ZOW
+REM                                                                        4ZOW
+REM  -------------------- Secondary structure summary -------------------  4ZOW
+REM                                                                        4ZOW
+CHN  4zow.pdb A                                                            4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  1    RLGRQALLFPLCLVLYEFSTYIGNDMIQPGMLAVVEQYQAGIDWVPTSMT   50          4ZOW
+STR       TTTTGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH    HHHHHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  51   AYLAGGMFLQWLLGPLSDRIGRRPVMLAGVVWFIVTCLAILLAQNIEQFT  100          4ZOW
+STR       HHHHHHH HHHHHHHHHHHH HHHHHHHHHHHHHHHHHHGGG   HHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  101  LLRFLQGISLCFIGAVGYAAIRESFEEAVCIKITALMANVALIAPLLGPL  150          4ZOW
+STR       HHHHHHHHHHHHHHHHHHHHHHHH  HHHHHHHHHHHHHHHHHHHHHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  151  VGAAWIHVLPWEGMFVLFAALAAISFFGLQRAMPETATRIGEKLSLKELG  200          4ZOW
+STR       HHHHHHTTT HHHHHHHHHHHHHHHHHHHHH     TTTTTT   HHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  201  RDYKLVLKNGRFVAGALALGFVSLPLLAWIAQSPIIIITGEQLSSYEYGL  250          4ZOW
+STR       HHHHHHH  HHHHHHHHHHHHHHHHHHHHHHHHHHHHHTTTT  HHHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  251  LQVPIFGALIAGNLLLARLTSRRTVRSLIIMGGWPIMIGLLVAAAATVIS  300          4ZOW
+STR       HHHHHHHHHHHHHHHHHHHHTTT HHHHHHHHHHHHHHHHHHHHHHHHHT               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .         .               4ZOW
+SEQ  301  SHAYLWMTAGLSIYAFGIGLANAGLVRLTLFASDMSKGTVSAAMGMLQML  350          4ZOW
+STR       TTTHHHHHHHHHHHHHHHHHHHHHHHHHHHHTTT  HHHHHHHHHHHHHH               4ZOW
+REM                                                                        4ZOW
+REM                .         .         .         .                         4ZOW
+SEQ  351  IFTVGIEISKHAWLNGGNGLFNLFNLVNGILWLSLMVIFLK           391          4ZOW
+STR       HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH                          4ZOW
+REM                                                                        4ZOW
+REM                                                                        4ZOW
+REM                                                                        4ZOW
+LOC  AlphaHelix   PHE    18 A      TYR     47 A                            4ZOW
+LOC  AlphaHelix   ASP    52 A      MET     66 A                            4ZOW
+LOC  AlphaHelix   LEU    68 A      ILE     79 A                            4ZOW
+LOC  AlphaHelix   ARG    81 A      ALA     98 A                            4ZOW
+LOC  AlphaHelix   ILE   105 A      SER    133 A                            4ZOW
+LOC  AlphaHelix   GLU   136 A      ILE    165 A                            4ZOW
+LOC  AlphaHelix   TRP   170 A      ARG    190 A                            4ZOW
+LOC  AlphaHelix   LEU   205 A      LEU    216 A                            4ZOW
+LOC  AlphaHelix   GLY   219 A      ILE    247 A                            4ZOW
+LOC  AlphaHelix   SER   254 A      THR    279 A                            4ZOW
+LOC  AlphaHelix   VAL   284 A      ILE    308 A                            4ZOW
+LOC  AlphaHelix   TYR   313 A      PHE    340 A                            4ZOW
+LOC  AlphaHelix   LYS   346 A      PHE    398 A                            4ZOW
+LOC  310Helix     GLN    14 A      LEU     17 A                            4ZOW
+LOC  310Helix     ILE    99 A      LEU    101 A                            4ZOW
+LOC  TurnIV       ARG    10 A      ARG     13 A                            4ZOW
+LOC  TurnI        LEU    11 A      GLN     14 A                            4ZOW
+LOC  TurnIV       ILE   165 A      LEU    168 A                            4ZOW
+LOC  TurnI        ALA   196 A      ILE    199 A                            4ZOW
+LOC  TurnVIa      ARG   198 A      GLU    201 A                            4ZOW
+LOC  TurnIV       ILE   247 A      GLU    250 A                            4ZOW
+LOC  TurnI        THR   248 A      GLN    251 A                            4ZOW
+LOC  TurnI        THR   279 A      ARG    282 A                            4ZOW
+LOC  TurnI        SER   309 A      ALA    312 A                            4ZOW
+LOC  TurnVIII     PHE   340 A      ASP    343 A                            4ZOW
+REM                                                                        4ZOW
+REM  --------------- Detailed secondary structure assignment-------------  4ZOW
+REM                                                                        4ZOW
+REM  |---Residue---|    |--Structure--|   |-Phi-|   |-Psi-|  |-Area-|      4ZOW
+ASG  ARG A   10    1    T          Turn    360.00    -16.79     132.0      4ZOW
+ASG  LEU A   11    2    T          Turn    -75.82    -50.04      81.4      4ZOW
+ASG  GLY A   12    3    T          Turn    -67.96    -59.83      74.3      4ZOW
+ASG  ARG A   13    4    T          Turn    -83.62    -42.72      87.2      4ZOW
+ASG  GLN A   14    5    G      310Helix    -88.74      0.32      62.5      4ZOW
+ASG  ALA A   15    6    G      310Helix    -77.15    -11.23      31.6      4ZOW
+ASG  LEU A   16    7    G      310Helix    -72.91     -9.62      96.4      4ZOW
+ASG  LEU A   17    8    G      310Helix    -65.43    -34.32      67.5      4ZOW
+ASG  PHE A   18    9    H    AlphaHelix    -62.23    -55.00       0.8      4ZOW
+ASG  PRO A   19   10    H    AlphaHelix    -63.41    -35.23       6.4      4ZOW
+ASG  LEU A   20   11    H    AlphaHelix    -59.64    -46.38      99.6      4ZOW
+ASG  CYS A   21   12    H    AlphaHelix    -74.69    -26.70       7.4      4ZOW
+ASG  LEU A   22   13    H    AlphaHelix    -69.63    -39.59       0.0      4ZOW
+ASG  VAL A   23   14    H    AlphaHelix    -62.68    -45.02      12.4      4ZOW
+ASG  LEU A   24   15    H    AlphaHelix    -63.32    -42.79      46.0      4ZOW
+ASG  TYR A   25   16    H    AlphaHelix    -61.80    -43.33       0.0      4ZOW
+ASG  GLU A   26   17    H    AlphaHelix    -55.86    -47.44       7.8      4ZOW
+ASG  PHE A   27   18    H    AlphaHelix    -61.83    -44.32      49.5      4ZOW
+ASG  SER A   28   19    H    AlphaHelix    -64.80    -33.65       0.0      4ZOW
+ASG  THR A   29   20    H    AlphaHelix    -77.07    -27.38       0.2      4ZOW
+ASG  TYR A   30   21    H    AlphaHelix    -77.22    -45.33      73.7      4ZOW
+ASG  ILE A   31   22    H    AlphaHelix    -70.79    -17.06       2.4      4ZOW
+ASG  GLY A   32   23    H    AlphaHelix    -57.05    -36.72       0.2      4ZOW
+ASG  ASN A   33   24    H    AlphaHelix    -83.41    -44.21      10.0      4ZOW
+ASG  ASP A   34   25    H    AlphaHelix    -74.95    -35.00      15.6      4ZOW
+ASG  MET A   35   26    H    AlphaHelix    -78.59    -28.21       9.6      4ZOW
+ASG  ILE A   36   27    H    AlphaHelix    -76.25    -35.65       1.6      4ZOW
+ASG  GLN A   37   28    H    AlphaHelix    -52.96    -51.86       1.0      4ZOW
+ASG  PRO A   38   29    H    AlphaHelix    -67.55    -24.43       2.4      4ZOW
+ASG  GLY A   39   30    H    AlphaHelix    -75.93    -16.35       1.2      4ZOW
+ASG  MET A   40   31    H    AlphaHelix    -62.83    -22.08       0.0      4ZOW
+ASG  LEU A   41   32    H    AlphaHelix    -67.29    -45.38      23.3      4ZOW
+ASG  ALA A   42   33    H    AlphaHelix    -63.82    -43.69      27.9      4ZOW
+ASG  VAL A   43   34    H    AlphaHelix    -58.94    -49.40       1.2      4ZOW
+ASG  VAL A   44   35    H    AlphaHelix    -71.27    -25.32       8.8      4ZOW
+ASG  GLU A   45   36    H    AlphaHelix    -79.12    -33.38     138.8      4ZOW
+ASG  GLN A   46   37    H    AlphaHelix    -69.83    -32.21     127.2      4ZOW
+ASG  TYR A   47   38    H    AlphaHelix    -93.44     -2.75      49.6      4ZOW
+ASG  GLN A   48   39    C          Coil     51.44     52.57     158.5      4ZOW
+ASG  ALA A   49   40    C          Coil   -114.18    155.32      22.3      4ZOW
+ASG  GLY A   50   41    C          Coil    -64.70    159.17      36.0      4ZOW
+ASG  ILE A   51   42    C          Coil    -68.73    -11.03      59.7      4ZOW
+ASG  ASP A   52   43    H    AlphaHelix    -72.62    -11.44      61.7      4ZOW
+ASG  TRP A   53   44    H    AlphaHelix    -87.48     -9.65      69.2      4ZOW
+ASG  VAL A   54   45    H    AlphaHelix    -64.15    -53.65       0.0      4ZOW
+ASG  PRO A   55   46    H    AlphaHelix    -69.18    -27.26       0.0      4ZOW
+ASG  THR A   56   47    H    AlphaHelix    -63.53    -25.31      23.1      4ZOW
+ASG  SER A   57   48    H    AlphaHelix    -58.31    -42.32       0.0      4ZOW
+ASG  MET A   58   49    H    AlphaHelix    -74.98    -34.73       3.8      4ZOW
+ASG  THR A   59   50    H    AlphaHelix    -59.74    -50.51      11.2      4ZOW
+ASG  ALA A   60   51    H    AlphaHelix    -64.51    -38.57      14.4      4ZOW
+ASG  TYR A   61   52    H    AlphaHelix    -61.49    -46.92       2.0      4ZOW
+ASG  LEU A   62   53    H    AlphaHelix    -72.85    -34.23      15.8      4ZOW
+ASG  ALA A   63   54    H    AlphaHelix    -61.36    -36.08      22.7      4ZOW
+ASG  GLY A   64   55    H    AlphaHelix    -67.50    -30.01       0.0      4ZOW
+ASG  GLY A   65   56    H    AlphaHelix    -72.60    -21.17       1.2      4ZOW
+ASG  MET A   66   57    H    AlphaHelix    -96.70      1.64      34.1      4ZOW
+ASG  PHE A   67   58    C          Coil    -73.21    -64.69     106.5      4ZOW
+ASG  LEU A   68   59    H    AlphaHelix    -92.78      5.50      43.9      4ZOW
+ASG  GLN A   69   60    H    AlphaHelix    -46.17    -63.46      28.2      4ZOW
+ASG  TRP A   70   61    H    AlphaHelix    -53.01    -35.02      84.7      4ZOW
+ASG  LEU A   71   62    H    AlphaHelix    -79.70    -41.32      38.7      4ZOW
+ASG  LEU A   72   63    H    AlphaHelix    -64.36    -38.06       4.6      4ZOW
+ASG  GLY A   73   64    H    AlphaHelix    -62.81    -56.72      15.0      4ZOW
+ASG  PRO A   74   65    H    AlphaHelix    -68.48    -28.63      18.4      4ZOW
+ASG  LEU A   75   66    H    AlphaHelix    -67.75    -48.74      49.3      4ZOW
+ASG  SER A   76   67    H    AlphaHelix    -67.65    -16.77       0.0      4ZOW
+ASG  ASP A   77   68    H    AlphaHelix    -72.61    -37.46      14.2      4ZOW
+ASG  ARG A   78   69    H    AlphaHelix    -78.73    -47.89      42.0      4ZOW
+ASG  ILE A   79   70    H    AlphaHelix    -96.98     -0.30      96.2      4ZOW
+ASG  GLY A   80   71    C          Coil     99.50    145.86       0.2      4ZOW
+ASG  ARG A   81   72    H    AlphaHelix    -80.74    -28.70      10.2      4ZOW
+ASG  ARG A   82   73    H    AlphaHelix    -59.02    -56.70      65.9      4ZOW
+ASG  PRO A   83   74    H    AlphaHelix    -68.36    -24.66      70.0      4ZOW
+ASG  VAL A   84   75    H    AlphaHelix    -76.05    -45.17      10.4      4ZOW
+ASG  MET A   85   76    H    AlphaHelix    -62.40    -48.09       0.0      4ZOW
+ASG  LEU A   86   77    H    AlphaHelix    -65.16    -34.61      20.4      4ZOW
+ASG  ALA A   87   78    H    AlphaHelix    -66.71    -37.59      53.5      4ZOW
+ASG  GLY A   88   79    H    AlphaHelix    -63.41    -46.03       0.0      4ZOW
+ASG  VAL A   89   80    H    AlphaHelix    -61.20    -43.59       0.0      4ZOW
+ASG  VAL A   90   81    H    AlphaHelix    -61.46    -44.14      61.2      4ZOW
+ASG  TRP A   91   82    H    AlphaHelix    -58.54    -38.33      99.1      4ZOW
+ASG  PHE A   92   83    H    AlphaHelix    -65.15    -43.66       1.0      4ZOW
+ASG  ILE A   93   84    H    AlphaHelix    -63.73    -45.59      32.1      4ZOW
+ASG  VAL A   94   85    H    AlphaHelix    -64.31    -44.70      81.6      4ZOW
+ASG  THR A   95   86    H    AlphaHelix    -70.76    -30.83       4.8      4ZOW
+ASG  CYS A   96   87    H    AlphaHelix    -65.66    -37.72       0.8      4ZOW
+ASG  LEU A   97   88    H    AlphaHelix    -78.27    -32.92      82.1      4ZOW
+ASG  ALA A   98   89    H    AlphaHelix    -67.64    -22.97      33.6      4ZOW
+ASG  ILE A   99   90    G      310Helix    -72.30    -12.73       0.0      4ZOW
+ASG  LEU A  100   91    G      310Helix    -71.84    -20.90      59.9      4ZOW
+ASG  LEU A  101   92    G      310Helix    -95.74      3.93     143.6      4ZOW
+ASG  ALA A  102   93    C          Coil    -49.62    -45.52       2.1      4ZOW
+ASG  GLN A  103   94    C          Coil     69.70    -13.14     160.3      4ZOW
+ASG  ASN A  104   95    C          Coil   -151.23    148.27      54.9      4ZOW
+ASG  ILE A  105   96    H    AlphaHelix    -65.09    -30.14       6.4      4ZOW
+ASG  GLU A  106   97    H    AlphaHelix    -68.90    -48.59      94.5      4ZOW
+ASG  GLN A  107   98    H    AlphaHelix    -67.36    -30.56      83.3      4ZOW
+ASG  PHE A  108   99    H    AlphaHelix    -63.05    -44.68       0.0      4ZOW
+ASG  THR A  109  100    H    AlphaHelix    -68.48    -35.34      17.9      4ZOW
+ASG  LEU A  110  101    H    AlphaHelix    -62.48    -44.60     100.2      4ZOW
+ASG  LEU A  111  102    H    AlphaHelix    -70.39    -28.29      28.3      4ZOW
+ASG  ARG A  112  103    H    AlphaHelix    -63.22    -41.64       1.4      4ZOW
+ASG  PHE A  113  104    H    AlphaHelix    -63.43    -46.25      50.5      4ZOW
+ASG  LEU A  114  105    H    AlphaHelix    -64.55    -32.98      45.5      4ZOW
+ASG  GLN A  115  106    H    AlphaHelix    -65.60    -40.06       0.0      4ZOW
+ASG  GLY A  116  107    H    AlphaHelix    -61.53    -23.24       0.0      4ZOW
+ASG  ILE A  117  108    H    AlphaHelix    -59.63    -30.25      12.2      4ZOW
+ASG  SER A  118  109    H    AlphaHelix    -59.52    -24.24       0.0      4ZOW
+ASG  LEU A  119  110    H    AlphaHelix    -63.81    -33.36      23.9      4ZOW
+ASG  CYS A  120  111    H    AlphaHelix    -62.99    -24.71       1.5      4ZOW
+ASG  PHE A  121  112    H    AlphaHelix    -76.72    -24.92      16.6      4ZOW
+ASG  ILE A  122  113    H    AlphaHelix    -63.64    -58.22      12.4      4ZOW
+ASG  GLY A  123  114    H    AlphaHelix    -77.08    -47.24      41.9      4ZOW
+ASG  ALA A  124  115    H    AlphaHelix    -71.37    -34.93      16.3      4ZOW
+ASG  VAL A  125  116    H    AlphaHelix   -114.59    -62.17       0.0      4ZOW
+ASG  GLY A  126  117    H    AlphaHelix    -52.01    -49.52       0.0      4ZOW
+ASG  TYR A  127  118    H    AlphaHelix    -74.51    -29.10      86.2      4ZOW
+ASG  ALA A  128  119    H    AlphaHelix    -63.89    -36.92      21.9      4ZOW
+ASG  ALA A  129  120    H    AlphaHelix    -67.64    -37.24       0.0      4ZOW
+ASG  ILE A  130  121    H    AlphaHelix    -62.48    -43.26       0.0      4ZOW
+ASG  ARG A  131  122    H    AlphaHelix    -63.84    -35.24      57.8      4ZOW
+ASG  GLU A  132  123    H    AlphaHelix    -80.44    -38.62      71.4      4ZOW
+ASG  SER A  133  124    H    AlphaHelix    -76.09    -45.76      41.1      4ZOW
+ASG  PHE A  134  125    C          Coil   -105.09    148.77      36.0      4ZOW
+ASG  GLU A  135  126    C          Coil    -64.24    157.15     144.0      4ZOW
+ASG  GLU A  136  127    H    AlphaHelix    -51.67    -35.50     174.0      4ZOW
+ASG  ALA A  137  128    H    AlphaHelix    -57.76    -66.02      74.4      4ZOW
+ASG  VAL A  138  129    H    AlphaHelix    -62.65    -34.93      52.4      4ZOW
+ASG  CYS A  139  130    H    AlphaHelix    -53.35    -44.39      15.4      4ZOW
+ASG  ILE A  140  131    H    AlphaHelix    -53.68    -46.31     104.0      4ZOW
+ASG  LYS A  141  132    H    AlphaHelix    -63.29    -44.62     155.0      4ZOW
+ASG  ILE A  142  133    H    AlphaHelix    -61.49    -43.28      10.1      4ZOW
+ASG  THR A  143  134    H    AlphaHelix    -62.02    -35.06      37.6      4ZOW
+ASG  ALA A  144  135    H    AlphaHelix    -68.65    -37.36      44.0      4ZOW
+ASG  LEU A  145  136    H    AlphaHelix    -67.66    -41.20      72.0      4ZOW
+ASG  MET A  146  137    H    AlphaHelix    -65.07    -34.41      16.9      4ZOW
+ASG  ALA A  147  138    H    AlphaHelix    -70.41    -42.36      47.6      4ZOW
+ASG  ASN A  148  139    H    AlphaHelix    -60.90    -49.14      85.6      4ZOW
+ASG  VAL A  149  140    H    AlphaHelix    -59.77    -44.48      17.0      4ZOW
+ASG  ALA A  150  141    H    AlphaHelix    -61.41    -23.69      27.7      4ZOW
+ASG  LEU A  151  142    H    AlphaHelix    -79.64    -32.52      27.4      4ZOW
+ASG  ILE A  152  143    H    AlphaHelix    -74.60    -33.96      71.8      4ZOW
+ASG  ALA A  153  144    H    AlphaHelix    -57.10    -54.22       0.0      4ZOW
+ASG  PRO A  154  145    H    AlphaHelix    -70.25    -19.11      12.0      4ZOW
+ASG  LEU A  155  146    H    AlphaHelix    -76.77    -50.64      37.1      4ZOW
+ASG  LEU A  156  147    H    AlphaHelix    -80.51    -37.32      74.4      4ZOW
+ASG  GLY A  157  148    H    AlphaHelix    -51.65    -53.62       0.4      4ZOW
+ASG  PRO A  158  149    H    AlphaHelix    -65.86    -33.62       6.4      4ZOW
+ASG  LEU A  159  150    H    AlphaHelix    -62.07    -55.98      56.3      4ZOW
+ASG  VAL A  160  151    H    AlphaHelix    -64.87    -40.66      64.3      4ZOW
+ASG  GLY A  161  152    H    AlphaHelix    -64.32    -39.66       0.0      4ZOW
+ASG  ALA A  162  153    H    AlphaHelix    -66.89    -33.37       6.6      4ZOW
+ASG  ALA A  163  154    H    AlphaHelix    -77.04    -34.05      58.6      4ZOW
+ASG  TRP A  164  155    H    AlphaHelix    -60.68    -38.80      43.6      4ZOW
+ASG  ILE A  165  156    H    AlphaHelix    -74.93     -8.91      46.3      4ZOW
+ASG  HIS A  166  157    T          Turn    -91.35     -8.40     132.4      4ZOW
+ASG  VAL A  167  158    T          Turn   -117.03    -61.86     110.7      4ZOW
+ASG  LEU A  168  159    T          Turn   -114.44    155.33      88.5      4ZOW
+ASG  PRO A  169  160    C          Coil    -64.41    157.70      82.8      4ZOW
+ASG  TRP A  170  161    H    AlphaHelix    -63.39    -30.30       8.7      4ZOW
+ASG  GLU A  171  162    H    AlphaHelix    -55.24    -34.74      47.9      4ZOW
+ASG  GLY A  172  163    H    AlphaHelix    -59.55    -30.86      19.5      4ZOW
+ASG  MET A  173  164    H    AlphaHelix    -63.09    -40.58       0.2      4ZOW
+ASG  PHE A  174  165    H    AlphaHelix    -70.94    -29.36       0.4      4ZOW
+ASG  VAL A  175  166    H    AlphaHelix    -69.03    -33.34      71.8      4ZOW
+ASG  LEU A  176  167    H    AlphaHelix    -66.27    -46.19      52.3      4ZOW
+ASG  PHE A  177  168    H    AlphaHelix    -61.71    -44.93       0.4      4ZOW
+ASG  ALA A  178  169    H    AlphaHelix    -61.70    -36.78       6.6      4ZOW
+ASG  ALA A  179  170    H    AlphaHelix    -65.57    -48.73      50.8      4ZOW
+ASG  LEU A  180  171    H    AlphaHelix    -64.93    -35.25      39.5      4ZOW
+ASG  ALA A  181  172    H    AlphaHelix    -70.61    -34.64       0.0      4ZOW
+ASG  ALA A  182  173    H    AlphaHelix    -61.47    -41.66      28.7      4ZOW
+ASG  ILE A  183  174    H    AlphaHelix    -60.44    -44.42      99.7      4ZOW
+ASG  SER A  184  175    H    AlphaHelix    -63.65    -38.14       0.0      4ZOW
+ASG  PHE A  185  176    H    AlphaHelix    -57.24    -56.64      35.3      4ZOW
+ASG  PHE A  186  177    H    AlphaHelix    -62.63    -36.98     111.5      4ZOW
+ASG  GLY A  187  178    H    AlphaHelix    -63.27    -53.11      10.5      4ZOW
+ASG  LEU A  188  179    H    AlphaHelix    -59.36    -37.52       0.4      4ZOW
+ASG  GLN A  189  180    H    AlphaHelix    -62.00    -33.91      78.0      4ZOW
+ASG  ARG A  190  181    H    AlphaHelix    -97.22     -2.19     184.5      4ZOW
+ASG  ALA A  191  182    C          Coil   -120.89    -60.87      20.1      4ZOW
+ASG  MET A  192  183    C          Coil    -54.17    119.92       2.4      4ZOW
+ASG  PRO A  193  184    C          Coil    -76.26    162.87      53.8      4ZOW
+ASG  GLU A  194  185    C          Coil    -94.46    109.31      79.1      4ZOW
+ASG  THR A  195  186    C          Coil    -99.61     -1.58      27.2      4ZOW
+ASG  ALA A  196  187    T          Turn    -69.28    123.14      15.5      4ZOW
+ASG  THR A  197  188    T          Turn    -81.25    -31.12      99.6      4ZOW
+ASG  ARG A  198  189    T          Turn    -92.73      6.25     103.4      4ZOW
+ASG  ILE A  199  190    T          Turn    -62.99    131.65      92.2      4ZOW
+ASG  GLY A  200  191    T          Turn   -103.91     24.45      66.6      4ZOW
+ASG  GLU A  201  192    T          Turn    -53.73    147.42     107.8      4ZOW
+ASG  LYS A  202  193    C          Coil    -62.91    148.37     191.6      4ZOW
+ASG  LEU A  203  194    C          Coil   -106.52    114.72      55.5      4ZOW
+ASG  SER A  204  195    C          Coil   -100.75    115.13      46.5      4ZOW
+ASG  LEU A  205  196    H    AlphaHelix    -69.11    -31.64     104.4      4ZOW
+ASG  LYS A  206  197    H    AlphaHelix    -75.93    -29.68     157.1      4ZOW
+ASG  GLU A  207  198    H    AlphaHelix    -79.61    -28.27     128.1      4ZOW
+ASG  LEU A  208  199    H    AlphaHelix    -68.52    -48.25      10.5      4ZOW
+ASG  GLY A  209  200    H    AlphaHelix    -63.37    -27.52      28.6      4ZOW
+ASG  ARG A  210  201    H    AlphaHelix    -64.81    -38.76     144.8      4ZOW
+ASG  ASP A  211  202    H    AlphaHelix    -67.43    -42.07      47.9      4ZOW
+ASG  TYR A  212  203    H    AlphaHelix    -69.28    -30.87      30.9      4ZOW
+ASG  LYS A  213  204    H    AlphaHelix    -71.66    -24.49     151.5      4ZOW
+ASG  LEU A  214  205    H    AlphaHelix    -78.68    -39.27      98.9      4ZOW
+ASG  VAL A  215  206    H    AlphaHelix    -72.25    -32.20       0.4      4ZOW
+ASG  LEU A  216  207    H    AlphaHelix    -73.82    -12.47      91.1      4ZOW
+ASG  LYS A  217  208    C          Coil    -85.70    -10.98     179.3      4ZOW
+ASG  ASN A  218  209    C          Coil    -79.34    120.06      46.0      4ZOW
+ASG  GLY A  219  210    H    AlphaHelix    -70.07    -47.68      56.6      4ZOW
+ASG  ARG A  220  211    H    AlphaHelix    -64.98    -40.89      87.0      4ZOW
+ASG  PHE A  221  212    H    AlphaHelix    -59.55    -52.45       0.0      4ZOW
+ASG  VAL A  222  213    H    AlphaHelix    -55.34    -46.44      35.9      4ZOW
+ASG  ALA A  223  214    H    AlphaHelix    -59.50    -44.52       7.3      4ZOW
+ASG  GLY A  224  215    H    AlphaHelix    -67.33    -41.24       0.2      4ZOW
+ASG  ALA A  225  216    H    AlphaHelix    -67.39    -44.19       0.0      4ZOW
+ASG  LEU A  226  217    H    AlphaHelix    -63.75    -41.08      47.5      4ZOW
+ASG  ALA A  227  218    H    AlphaHelix    -61.09    -37.28       0.2      4ZOW
+ASG  LEU A  228  219    H    AlphaHelix    -60.94    -40.73       2.4      4ZOW
+ASG  GLY A  229  220    H    AlphaHelix    -65.38    -54.28       0.0      4ZOW
+ASG  PHE A  230  221    H    AlphaHelix    -60.64    -38.56      44.1      4ZOW
+ASG  VAL A  231  222    H    AlphaHelix    -76.43    -29.42       0.2      4ZOW
+ASG  SER A  232  223    H    AlphaHelix    -89.74    -11.12      16.0      4ZOW
+ASG  LEU A  233  224    H    AlphaHelix    -58.26    -44.71       1.2      4ZOW
+ASG  PRO A  234  225    H    AlphaHelix    -57.44    -40.12       0.2      4ZOW
+ASG  LEU A  235  226    H    AlphaHelix    -62.60    -46.51      16.0      4ZOW
+ASG  LEU A  236  227    H    AlphaHelix    -71.00    -32.93      32.5      4ZOW
+ASG  ALA A  237  228    H    AlphaHelix    -66.46    -36.51       0.0      4ZOW
+ASG  TRP A  238  229    H    AlphaHelix    -61.03    -53.57       1.0      4ZOW
+ASG  ILE A  239  230    H    AlphaHelix    -52.27    -47.07      15.6      4ZOW
+ASG  ALA A  240  231    H    AlphaHelix    -64.37    -47.08       0.0      4ZOW
+ASG  GLN A  241  232    H    AlphaHelix    -97.17     -4.52       0.0      4ZOW
+ASG  SER A  242  233    H    AlphaHelix    -52.58    -46.20       0.0      4ZOW
+ASG  PRO A  243  234    H    AlphaHelix    -59.91    -45.17       0.0      4ZOW
+ASG  ILE A  244  235    H    AlphaHelix    -79.14    -29.07       0.0      4ZOW
+ASG  ILE A  245  236    H    AlphaHelix    -67.45    -50.83       0.4      4ZOW
+ASG  ILE A  246  237    H    AlphaHelix    -76.42    -63.65       1.0      4ZOW
+ASG  ILE A  247  238    H    AlphaHelix    -70.34    -52.34      32.7      4ZOW
+ASG  THR A  248  239    T          Turn    -79.15    -43.68      41.2      4ZOW
+ASG  GLY A  249  240    T          Turn    -72.32    -51.71      26.0      4ZOW
+ASG  GLU A  250  241    T          Turn    -95.49     -0.76      27.8      4ZOW
+ASG  GLN A  251  242    T          Turn     58.69     31.35     157.8      4ZOW
+ASG  LEU A  252  243    C          Coil    -87.51    178.14      34.0      4ZOW
+ASG  SER A  253  244    C          Coil    -99.56    178.68      50.0      4ZOW
+ASG  SER A  254  245    H    AlphaHelix    -69.62    -26.95      26.6      4ZOW
+ASG  TYR A  255  246    H    AlphaHelix    -69.50    -42.81     164.5      4ZOW
+ASG  GLU A  256  247    H    AlphaHelix    -66.93    -41.15      72.8      4ZOW
+ASG  TYR A  257  248    H    AlphaHelix    -53.26    -48.77       4.2      4ZOW
+ASG  GLY A  258  249    H    AlphaHelix    -68.69    -39.32       9.3      4ZOW
+ASG  LEU A  259  250    H    AlphaHelix    -59.67    -40.21      84.1      4ZOW
+ASG  LEU A  260  251    H    AlphaHelix    -69.04    -24.08      15.6      4ZOW
+ASG  GLN A  261  252    H    AlphaHelix    -69.55    -25.46       2.0      4ZOW
+ASG  VAL A  262  253    H    AlphaHelix    -63.34    -53.31      72.1      4ZOW
+ASG  PRO A  263  254    H    AlphaHelix    -66.85    -30.87      58.1      4ZOW
+ASG  ILE A  264  255    H    AlphaHelix    -69.87    -53.94       1.0      4ZOW
+ASG  PHE A  265  256    H    AlphaHelix    -84.64    -14.22       1.8      4ZOW
+ASG  GLY A  266  257    H    AlphaHelix    -69.67    -40.44      30.3      4ZOW
+ASG  ALA A  267  258    H    AlphaHelix    -69.49    -36.28      17.7      4ZOW
+ASG  LEU A  268  259    H    AlphaHelix    -57.18    -50.48      13.4      4ZOW
+ASG  ILE A  269  260    H    AlphaHelix    -64.37    -42.61      41.1      4ZOW
+ASG  ALA A  270  261    H    AlphaHelix    -58.74    -37.27      38.3      4ZOW
+ASG  GLY A  271  262    H    AlphaHelix    -63.62    -42.95       0.0      4ZOW
+ASG  ASN A  272  263    H    AlphaHelix    -68.83    -37.57      37.9      4ZOW
+ASG  LEU A  273  264    H    AlphaHelix    -63.44    -42.60      84.2      4ZOW
+ASG  LEU A  274  265    H    AlphaHelix    -64.84    -40.61      47.7      4ZOW
+ASG  LEU A  275  266    H    AlphaHelix    -57.80    -43.08      17.2      4ZOW
+ASG  ALA A  276  267    H    AlphaHelix    -65.00    -33.03      67.2      4ZOW
+ASG  ARG A  277  268    H    AlphaHelix    -77.44    -33.49     181.9      4ZOW
+ASG  LEU A  278  269    H    AlphaHelix    -91.50     -9.42      35.5      4ZOW
+ASG  THR A  279  270    H    AlphaHelix    -64.54    -26.44      60.2      4ZOW
+ASG  SER A  280  271    T          Turn    -78.10    -35.80      85.2      4ZOW
+ASG  ARG A  281  272    T          Turn    -97.71      2.58     200.8      4ZOW
+ASG  ARG A  282  273    T          Turn   -131.80    149.06     103.2      4ZOW
+ASG  THR A  283  274    C          Coil   -100.12    145.65      71.4      4ZOW
+ASG  VAL A  284  275    H    AlphaHelix    -53.67    -28.35      16.3      4ZOW
+ASG  ARG A  285  276    H    AlphaHelix    -65.53    -41.44     131.1      4ZOW
+ASG  SER A  286  277    H    AlphaHelix    -78.07    -26.81      33.8      4ZOW
+ASG  LEU A  287  278    H    AlphaHelix    -67.65    -36.77       0.4      4ZOW
+ASG  ILE A  288  279    H    AlphaHelix    -62.34    -50.23       3.4      4ZOW
+ASG  ILE A  289  280    H    AlphaHelix    -62.74    -33.58      97.7      4ZOW
+ASG  MET A  290  281    H    AlphaHelix    -70.45    -43.32      59.6      4ZOW
+ASG  GLY A  291  282    H    AlphaHelix    -73.04    -22.11       0.0      4ZOW
+ASG  GLY A  292  283    H    AlphaHelix    -59.67    -36.76       9.6      4ZOW
+ASG  TRP A  293  284    H    AlphaHelix    -64.62    -54.84     184.2      4ZOW
+ASG  PRO A  294  285    H    AlphaHelix    -68.08    -24.32      25.4      4ZOW
+ASG  ILE A  295  286    H    AlphaHelix    -64.97    -53.58       0.0      4ZOW
+ASG  MET A  296  287    H    AlphaHelix    -66.70    -42.61      28.1      4ZOW
+ASG  ILE A  297  288    H    AlphaHelix    -65.09    -45.65      77.8      4ZOW
+ASG  GLY A  298  289    H    AlphaHelix    -57.18    -46.61       0.0      4ZOW
+ASG  LEU A  299  290    H    AlphaHelix    -69.04    -36.12       2.5      4ZOW
+ASG  LEU A  300  291    H    AlphaHelix    -65.13    -45.16      84.5      4ZOW
+ASG  VAL A  301  292    H    AlphaHelix    -59.72    -46.48      44.9      4ZOW
+ASG  ALA A  302  293    H    AlphaHelix    -65.42    -40.67       1.2      4ZOW
+ASG  ALA A  303  294    H    AlphaHelix    -68.48    -51.14       1.8      4ZOW
+ASG  ALA A  304  295    H    AlphaHelix    -58.33    -51.01      57.2      4ZOW
+ASG  ALA A  305  296    H    AlphaHelix    -59.44    -40.16      19.5      4ZOW
+ASG  THR A  306  297    H    AlphaHelix    -83.94    -13.99       2.6      4ZOW
+ASG  VAL A  307  298    H    AlphaHelix    -78.51    -43.45      85.3      4ZOW
+ASG  ILE A  308  299    H    AlphaHelix    -58.59    -67.76     147.6      4ZOW
+ASG  SER A  309  300    T          Turn   -120.03    112.17      58.9      4ZOW
+ASG  SER A  310  301    T          Turn    -64.61    -23.54      46.5      4ZOW
+ASG  HIS A  311  302    T          Turn    -94.52      4.66     121.8      4ZOW
+ASG  ALA A  312  303    T          Turn    -92.06    107.44      22.4      4ZOW
+ASG  TYR A  313  304    H    AlphaHelix    -94.43    -11.59      63.5      4ZOW
+ASG  LEU A  314  305    H    AlphaHelix    -80.23    -37.05     107.1      4ZOW
+ASG  TRP A  315  306    H    AlphaHelix    -68.42    -36.51     159.2      4ZOW
+ASG  MET A  316  307    H    AlphaHelix    -66.99    -46.45       0.4      4ZOW
+ASG  THR A  317  308    H    AlphaHelix    -63.09    -41.34       6.2      4ZOW
+ASG  ALA A  318  309    H    AlphaHelix    -61.24    -46.28      43.5      4ZOW
+ASG  GLY A  319  310    H    AlphaHelix    -61.44    -44.63       0.2      4ZOW
+ASG  LEU A  320  311    H    AlphaHelix    -67.24    -27.30       1.8      4ZOW
+ASG  SER A  321  312    H    AlphaHelix    -73.05    -45.78      14.4      4ZOW
+ASG  ILE A  322  313    H    AlphaHelix    -63.12    -40.37      71.1      4ZOW
+ASG  TYR A  323  314    H    AlphaHelix    -64.84    -41.51       0.0      4ZOW
+ASG  ALA A  324  315    H    AlphaHelix    -66.51    -26.70       0.0      4ZOW
+ASG  PHE A  325  316    H    AlphaHelix    -67.84    -43.20      62.7      4ZOW
+ASG  GLY A  326  317    H    AlphaHelix    -63.43    -38.22       0.0      4ZOW
+ASG  ILE A  327  318    H    AlphaHelix    -60.80    -45.82       4.9      4ZOW
+ASG  GLY A  328  319    H    AlphaHelix    -58.98    -39.09       1.4      4ZOW
+ASG  LEU A  329  320    H    AlphaHelix    -75.08    -49.68       3.4      4ZOW
+ASG  ALA A  330  321    H    AlphaHelix    -82.23    -29.65       0.8      4ZOW
+ASG  ASN A  331  322    H    AlphaHelix    -68.95    -46.90      25.7      4ZOW
+ASG  ALA A  332  323    H    AlphaHelix    -61.55    -31.63      41.0      4ZOW
+ASG  GLY A  333  324    H    AlphaHelix    -67.46    -47.23       0.8      4ZOW
+ASG  LEU A  334  325    H    AlphaHelix    -63.43    -31.45       0.4      4ZOW
+ASG  VAL A  335  326    H    AlphaHelix    -62.68    -47.61      55.1      4ZOW
+ASG  ARG A  336  327    H    AlphaHelix    -57.21    -53.60     124.9      4ZOW
+ASG  LEU A  337  328    H    AlphaHelix    -57.27    -41.51      23.5      4ZOW
+ASG  THR A  338  329    H    AlphaHelix    -64.75    -40.48       0.0      4ZOW
+ASG  LEU A  339  330    H    AlphaHelix    -61.56    -44.77      47.5      4ZOW
+ASG  PHE A  340  331    H    AlphaHelix    -86.19      0.88     149.9      4ZOW
+ASG  ALA A  341  332    T          Turn    -83.33     -3.23      17.5      4ZOW
+ASG  SER A  342  333    T          Turn   -131.40    136.78      12.5      4ZOW
+ASG  ASP A  343  334    T          Turn    -90.96      2.52     170.1      4ZOW
+ASG  MET A  344  335    C          Coil    -73.97   -179.76      52.6      4ZOW
+ASG  SER A  345  336    C          Coil    -58.59    129.24      70.7      4ZOW
+ASG  LYS A  346  337    H    AlphaHelix    -59.06    -25.53     157.3      4ZOW
+ASG  GLY A  347  338    H    AlphaHelix    -70.99    -47.06      47.6      4ZOW
+ASG  THR A  348  339    H    AlphaHelix    -65.25    -41.60      13.3      4ZOW
+ASG  VAL A  349  340    H    AlphaHelix    -64.28    -44.71       1.4      4ZOW
+ASG  SER A  350  341    H    AlphaHelix    -62.04    -46.15      54.5      4ZOW
+ASG  ALA A  351  342    H    AlphaHelix    -63.43    -38.96       5.4      4ZOW
+ASG  ALA A  352  343    H    AlphaHelix    -63.32    -47.51       6.9      4ZOW
+ASG  MET A  353  344    H    AlphaHelix    -73.17    -30.70       9.8      4ZOW
+ASG  GLY A  354  345    H    AlphaHelix    -61.77    -45.60      15.8      4ZOW
+ASG  MET A  355  346    H    AlphaHelix    -70.75    -34.65      47.5      4ZOW
+ASG  LEU A  356  347    H    AlphaHelix    -66.19    -40.85      29.8      4ZOW
+ASG  GLN A  357  348    H    AlphaHelix    -65.14    -43.19      41.7      4ZOW
+ASG  MET A  358  349    H    AlphaHelix    -63.08    -39.40      27.3      4ZOW
+ASG  LEU A  359  350    H    AlphaHelix    -59.39    -45.55      89.5      4ZOW
+ASG  ILE A  360  351    H    AlphaHelix    -66.51    -39.06      17.3      4ZOW
+ASG  PHE A  361  352    H    AlphaHelix    -66.57    -45.44      14.8      4ZOW
+ASG  THR A  362  353    H    AlphaHelix    -63.06    -54.09      24.7      4ZOW
+ASG  VAL A  363  354    H    AlphaHelix    -69.24    -37.29      72.9      4ZOW
+ASG  GLY A  364  355    H    AlphaHelix    -64.39    -41.08       3.8      4ZOW
+ASG  ILE A  365  356    H    AlphaHelix    -64.42    -43.79       0.2      4ZOW
+ASG  GLU A  366  357    H    AlphaHelix    -63.65    -42.61      41.5      4ZOW
+ASG  ILE A  367  358    H    AlphaHelix    -63.16    -45.49      79.5      4ZOW
+ASG  SER A  368  359    H    AlphaHelix    -57.66    -38.92       0.0      4ZOW
+ASG  LYS A  369  360    H    AlphaHelix    -61.80    -52.70      11.8      4ZOW
+ASG  HIS A  370  361    H    AlphaHelix    -66.14    -26.53     100.5      4ZOW
+ASG  ALA A  371  362    H    AlphaHelix    -64.78    -45.36      12.9      4ZOW
+ASG  TRP A  372  363    H    AlphaHelix    -74.87    -37.59      27.2      4ZOW
+ASG  LEU A  373  364    H    AlphaHelix    -61.43    -44.32      70.4      4ZOW
+ASG  ASN A  374  365    H    AlphaHelix    -79.12    -47.62     134.8      4ZOW
+ASG  GLY A  375  366    H    AlphaHelix   -109.73      5.93      33.6      4ZOW
+ASG  GLY A  376  367    H    AlphaHelix     67.89   -155.47      21.5      4ZOW
+ASG  ASN A  377  368    H    AlphaHelix    -63.69    -34.49       1.9      4ZOW
+ASG  GLY A  378  369    H    AlphaHelix    -55.77    -49.52       8.1      4ZOW
+ASG  LEU A  379  370    H    AlphaHelix    -67.57    -36.41      73.9      4ZOW
+ASG  PHE A  380  371    H    AlphaHelix    -57.36    -47.06       0.0      4ZOW
+ASG  ASN A  381  372    H    AlphaHelix    -77.93    -29.45       2.0      4ZOW
+ASG  LEU A  382  373    H    AlphaHelix    -67.08    -39.73      70.1      4ZOW
+ASG  PHE A  383  374    H    AlphaHelix    -70.82    -32.23      41.7      4ZOW
+ASG  ASN A  384  375    H    AlphaHelix    -66.84    -32.26       0.8      4ZOW
+ASG  LEU A  385  376    H    AlphaHelix    -68.94    -42.41      22.4      4ZOW
+ASG  VAL A  386  377    H    AlphaHelix    -65.10    -33.36      65.5      4ZOW
+ASG  ASN A  387  378    H    AlphaHelix    -63.53    -37.75       3.2      4ZOW
+ASG  GLY A  388  379    H    AlphaHelix    -65.38    -41.39       0.0      4ZOW
+ASG  ILE A  389  380    H    AlphaHelix    -67.56    -34.29      76.2      4ZOW
+ASG  LEU A  390  381    H    AlphaHelix    -63.53    -41.41      70.4      4ZOW
+ASG  TRP A  391  382    H    AlphaHelix    -61.99    -47.52       3.4      4ZOW
+ASG  LEU A  392  383    H    AlphaHelix    -59.57    -44.58      76.0      4ZOW
+ASG  SER A  393  384    H    AlphaHelix    -60.59    -41.53      60.0      4ZOW
+ASG  LEU A  394  385    H    AlphaHelix    -70.85    -26.04      31.3      4ZOW
+ASG  MET A  395  386    H    AlphaHelix    -67.24    -45.71       7.4      4ZOW
+ASG  VAL A  396  387    H    AlphaHelix    -63.50    -32.44      99.5      4ZOW
+ASG  ILE A  397  388    H    AlphaHelix    -70.09    -51.56     106.5      4ZOW
+ASG  PHE A  398  389    H    AlphaHelix    -53.53    -40.57       0.2      4ZOW
+ASG  LEU A  399  390    C          Coil   -132.42    115.64      51.7      4ZOW
+ASG  LYS A  400  391    C          Coil    -82.50    360.00     210.2      4ZOW
