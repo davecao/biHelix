@@ -39,20 +39,20 @@ General usage:
     biHelix [-i=required] [-o=helix_out.txt] [-k] [-q] [-v]
 
 Options and flags {default values}:
-    -i, --in    The input file name.  {required}
-    -o, --out    The output file name.  {helix_out.txt}
-    -k, --kink    Only calculate the kinks.
-    -q, --quiet    Only output to file.
-    -v, --verbose    write more to file.
+-i, --in       The input file name.  {required}
+-o, --out      The output file name.  {helix_out.txt}
+-k, --kink     Only calculate the kinks.
+-q, --quiet    Only output to file.
+-v, --verbose  write more to file.
 
-  Positional arguments: None
+Positional arguments: None
 
 Also, -?, -h, -H, -help, --help, and --usage are recognized.
 
 
 Input format
 -------------
- see ATOM section used in PDB format
+
 +---------+----------+------------------------------------------------------+
 | Fields  | Fortran  | Descritpion                                          |
 +=========+==========+======================================================+
