@@ -1,1 +1,4 @@
 option('realbits', type : 'string', value : '64', description : 'real bits')
+option('blas', type: 'string', value: '', description: 'blas libs')
+option('lapack', type: 'string', value: '', description: 'lapack')
+option('framework', type: 'string', value: 'openmp', description: ' parallel framework')

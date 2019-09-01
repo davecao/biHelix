@@ -25,7 +25,7 @@ if fc.get_id() == 'gcc'
     # dialect = [ '-ffree-form','-std=f2003','-fimplicit-none']
     # bounds = '-fbounds-check'
 elif fc.get_id() == 'intel'
-    add_global_arguments('-stand', 'f18', '-warn declarations', language: 'fortran')
+    add_global_arguments('-cpp', '-stand', 'f18', language: 'fortran')
     oldargs = '-nowarn'
     # dialect = ['-stand f03','-free','-implicitnone']
     # bounds = '-check bounds'
