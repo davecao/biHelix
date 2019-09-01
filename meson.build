@@ -1,6 +1,8 @@
 project(
     'biHelix', 'fortran',
     version:'1.0.0',
+    license:['proprietary', 'GPL3'],
+    meson_version:'>=0.28.0',
     default_options:['default_library=static', 'buildtype=release'])
 
 realbits = get_option('realbits')

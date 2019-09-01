@@ -24,6 +24,18 @@ lapack = fc.find_library('lapack', required: true)
 if not lapack.found()
     error('MESON_SKIP_TEST: LAPACK Library not available')
 endif
-bindir = meson.source_root() + '/bin/'
-exe = executable(bindir + 'biHelix', sources, dependencies: [blas, lapack])
+
+bindir = get_option('bindir')
+if bindir == ''
+   bindir = join_paths(meson.source_root(), 'bin')
+endif
+
+exe_name = join_paths(bindir, meson.project_name())
+inc = include_directories(join_paths('..','include'))
+
+exe = executable(
+    exe_name,
+    sources,
+    include_directories: inc,
+    dependencies: [blas, lapack])
 test('biHelix',exe)
