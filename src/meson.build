@@ -24,6 +24,6 @@ lapack = fc.find_library('lapack', required: true)
 if not lapack.found()
     error('MESON_SKIP_TEST: LAPACK Library not available')
 endif
-
-exe = executable('biHelix', sources, dependencies: [blas, lapack])
+bindir = meson.source_root() + '/bin/'
+exe = executable(bindir + 'biHelix', sources, dependencies: [blas, lapack])
 test('biHelix',exe)

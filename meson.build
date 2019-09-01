@@ -48,6 +48,7 @@ f18errorstop = fc.links('character :: b; error stop b; end', name: 'F2018 error 
 
 includes = include_directories('include')
 subdir('src')
+# bindir = meson.source_root() # do not pass to sub meson.build
 
 #program(
 #    'biHelix',
