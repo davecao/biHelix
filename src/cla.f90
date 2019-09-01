@@ -54,14 +54,14 @@ module cla
   integer(kind=int_kind), parameter, private :: CLALEN=1024
   character(len=CLALEN), private  :: cla_cla
   integer(kind=int_kind), private :: cla_cla_len
-  
+
   character(len=STRLEN), dimension(6) :: cla_kindstr
   character(len=STRLEN), private :: cla_empty
   character(len=STRLEN), dimension(6) :: cla_true_str
 
   type, private :: cla_t
      character(len=2)  :: key
-     character(len=STRLEN)  :: longkey 
+     character(len=STRLEN)  :: longkey
      character(len=XSTRLEN) :: description
      integer(kind=int_kind) :: kind
      character(len=STRLEN)  :: default
@@ -71,7 +71,7 @@ module cla
      character(len=STRLEN)  :: key
      character(len=XSTRLEN) :: description
      integer(kind=int_kind) :: kind
-     character(len=STRLEN)  :: default     
+     character(len=STRLEN)  :: default
   end type cla_posarg_t
 
   type(cla_t), private, dimension(:), pointer :: cla_registry
@@ -79,7 +79,7 @@ module cla
 
 
   integer(kind=int_kind), private :: cla_num
-  integer(kind=int_kind), private :: cla_posarg_num  
+  integer(kind=int_kind), private :: cla_posarg_num
 
   interface cla_init
      module procedure &
@@ -153,15 +153,15 @@ module cla
 
     subroutine cla_message(message)
     character(LEN=*) message
-    ! Default stop with message without print or stop statements. 
-    ! May need to be modified for, e.g. MPI codes 
+    ! Default stop with message without print or stop statements.
+    ! May need to be modified for, e.g. MPI codes
     write(stdout,*)message
-    end subroutine  
-  
+    end subroutine
+
     subroutine cla_fatal(message)
     character(LEN=*) message
-    ! Default stop with message without print or stop statements. 
-    ! May need to be modified for, e.g. MPI codes 
+    ! Default stop with message without print or stop statements.
+    ! May need to be modified for, e.g. MPI codes
     write(stderr,*)message
     stop 6
     end subroutine
@@ -185,7 +185,7 @@ module cla
       cla_cla = outs
       cla_cla_len = len_trim(cla_cla)
     end subroutine cla_read_str
-    
+
     subroutine cla_init_str(cla_input_str)
       implicit none
       character(len=*) :: cla_input_str
@@ -209,7 +209,7 @@ module cla
       ! associated.
       cla_num = 0
       allocate(cla_registry(0))
-      allocate(cla_posarg_registry(0))      
+      allocate(cla_posarg_registry(0))
       cla_kindstr(cla_int)     = 'integer'
       cla_kindstr(cla_float)   = 'float'
       cla_kindstr(cla_char)    = 'character'
@@ -230,7 +230,7 @@ module cla
       ! associated.
       cla_num = 0
       allocate(cla_registry(0))
-      allocate(cla_posarg_registry(0))      
+      allocate(cla_posarg_registry(0))
       cla_kindstr(cla_int)     = 'integer'
       cla_kindstr(cla_float)   = 'float'
       cla_kindstr(cla_char)    = 'character'
@@ -322,7 +322,7 @@ module cla
          end if
          if (index(trim(longkey),' ') /= 0) then
             call cla_fatal('Attempt to register long key containing space')
-         end if         
+         end if
          if (cla_str_eq(trim(cla_registry(i)%key),trim(key))) then
             call cla_fatal('Attempt to register cla key already registered'// &
                            trim(key))
@@ -422,9 +422,9 @@ module cla
                                        trim(cla_registry(i)%description)
          else
             write(stdout,'(1x,a,1x,a24,":",4x,a,2x,"{",a,"}")')trim(cla_registry(i)%key), &
-                                 trim(cla_registry(i)%longkey), &   
-                                 trim(cla_registry(i)%description), & 
-                                 trim(cla_registry(i)%default) 
+                                 trim(cla_registry(i)%longkey), &
+                                 trim(cla_registry(i)%description), &
+                                 trim(cla_registry(i)%default)
          endif
       end do
       write(stdout,*)' '
@@ -435,7 +435,7 @@ module cla
         write(stdout,'(1x,a,":",1x,a,4x,a)')trim(cla_posarg_registry(i)%key), &
                                 trim(cla_posarg_registry(i)%description)
       end do
-      
+
       write(stdout,*)' '
       write(stdout,*)'Also, -?, -h, -H, -help, --help, and --usage are recognized.'
       write(stdout,*)' '
@@ -459,8 +459,8 @@ module cla
       iequal = index(arg,"=")
       if (iequal > 1) &
          cla_key_arg_match = cla_str_eq(trim(key),arg(1:(iequal-1))) .or. &
-                         cla_str_eq(trim(longkey),arg(1:(iequal-1)))      
-    end function cla_key_arg_match   
+                         cla_str_eq(trim(longkey),arg(1:(iequal-1)))
+    end function cla_key_arg_match
 
 
     logical function cla_str_eq(str1,str2)
@@ -481,7 +481,7 @@ module cla
       integer(kind=int_kind) :: ncla !, iequal
       ncla = cla_command_argument_count()
       if (ncla == 0) return
-      
+
       ! First check for -?, -h, -H, -help, or --help flags.
       call cla_get_command_argument(1,arg)
       key = trim(arg)
@@ -514,7 +514,7 @@ module cla
       !     value.
       !     Note that no error is reported if the key was NOT
       !     registered, but it is present on the command line.
- 
+
       cla_key_present = .false.
 
 !      print *,'Calling cla_key_present with key = ',trim(key)
@@ -535,10 +535,10 @@ module cla
          call cla_show
          call cla_fatal('Unknown command line argument: '//trim(key))
       endif
-      
+
       ncla = cla_command_argument_count()
       if (ncla == 0) return
-      
+
       do k=1,ncla
          call cla_get_command_argument(k,arg)
          ! test for exact match
@@ -586,7 +586,7 @@ module cla
             call cla_show
             stop 5
          endif
-         
+
          if (ordinal > 0) then
             ncla = cla_command_argument_count()
             if (ncla == 0) then
@@ -595,11 +595,11 @@ module cla
             end if
             kmatch = 0
             prev_matched = .False.
-            
+
             do k=1,ncla
                call cla_get_command_argument(k,arg)
                ! test for exact match among key args
-               just_matched = .False.    
+               just_matched = .False.
                do kk = 1, cla_num
                   kkey = cla_registry(kk)%key
                   kkind = cla_registry(kk)%kind
@@ -626,7 +626,7 @@ module cla
                   value=pvalue
                   return
                end if
-               
+
             end do
          end if
          value = pvalue
@@ -641,7 +641,7 @@ module cla
               key)) then
             shortkey = cla_registry(k)%key
             longkey = cla_registry(k)%longkey
-            
+
             value = trim(cla_registry(k)%default)
             kkind = cla_registry(k)%kind
          end if
@@ -666,7 +666,7 @@ module cla
             else
                iequal = index(arg,"=")
                if (iequal < 1)then
-                  call cla_get_command_argument(k+1,arg)       
+                  call cla_get_command_argument(k+1,arg)
                   value = trim(arg)
                   return
                else
@@ -708,12 +708,12 @@ module cla
     character(len=*)       :: key
     character(len=STRLEN)  :: value
     integer(kind=4)        :: int_value
-    
+
     call cla_get_char(key,value)
     if (index(trim(value),trim(cla_empty)) == 0) read(value,*,ERR=100)int_value
     return
- 100  call cla_fatal("Input value not correct type: "//value)    
-    
+ 100  call cla_fatal("Input value not correct type: "//value)
+
   end subroutine cla_get_int_i4
 
   subroutine cla_get_int_i8(key,int_value)
@@ -721,11 +721,11 @@ module cla
     character(len=*)       :: key
     character(len=STRLEN)  :: value
     integer(kind=8)        :: int_value
-    
+
     call cla_get_char(key,value)
     if (index(trim(value),trim(cla_empty)) == 0) read(value,*,ERR=100)int_value
     return
- 100  call cla_fatal("Input value not correct type: "//value)        
+ 100  call cla_fatal("Input value not correct type: "//value)
   end subroutine cla_get_int_i8
 
   subroutine cla_get_logical(key,logical_value)
@@ -734,7 +734,7 @@ module cla
     character(len=STRLEN)  :: value
     logical :: logical_value
     integer(kind=int_kind) :: k
-    
+
     logical_value = .false.
 
     call cla_get_char(key,value)

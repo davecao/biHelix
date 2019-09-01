@@ -61,6 +61,9 @@ IF(APPLE)
 ELSE()
     SET(GNUNATIVE "-march=native")
 ENDIF()
+
+# i.e., SET_COMPILE_FLAG FLAGVAR FLAGVAL LANG
+
 # Optimize for the host's architecture
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
                  Fortran "-xHost"        # Intel
@@ -72,12 +75,12 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
 # processing macro
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
                  Fortran "-cpp"        # GNU
-                 )
+                )
 ###################
 ### DEBUG FLAGS ###
 ###################
 
-# NOTE: debugging symbols (-g or /debug:full) are already on by default
+# NOTE: debugging symbols (-g or /debug:full) are already on by  default
 
 # Disable optimizations
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG}"
@@ -124,8 +127,17 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_TESTING "${CMAKE_Fortran_FLAGS_TESTING}"
 ### RELEASE FLAGS ###
 #####################
 
-# NOTE: agressive optimizations (-O3) are already turned on by default
+# NOTE: aggressive optimizations (-O3) are already turned on by default
+# SET_COMPILE_FLAG is defined in SetCompilerFlag.cmake
+# SET_COMPILE_FLAG(FLAGVAR FLAGVAL (Fortran|C|CXX) <REQUIRED> flag1 flag2...)
 
+
+# standard
+#SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
+#                 Fortran "-std=f2003" # GNU
+#                         "-stand f03"        # Intel
+#                )
+                
 # Unroll loops
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
                  Fortran "-funroll-loops" # GNU
@@ -156,9 +168,15 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
                          "/Qip" # Intel Windows
                 )
 
-# Vectorize code
+# Vectorize code:
+
+#SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
+#                 Fortran "-vec-report0"  # Intel
+#                         "/Qvec-report0" # Intel Windows
+#                         "-Mvect"        # Portland Group
+#              )
+
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
-                 Fortran "-vec-report0"  # Intel
-                         "/Qvec-report0" # Intel Windows
-                         "-Mvect"        # Portland Group
-                )
+               Fortran "/Qvec-report0" # Intel Windows
+                       "-Mvect"        # Portland Group
+              )

@@ -1,7 +1,47 @@
+! ******************************************************************************
+!
+! file: io.f90
+!
+!
+! author: Cao Wei
+! Timestamp: Sat Jul  6 07:56:01 2019
+!
+! Copyright (C) 2019 Cao Wei. All rights reserved.
+!
+!
+! The following statement of license applies *only* to this header file,
+! and *not* to the other files distributed with FFTW or derived therefrom:
+!
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions
+! are met:
+!
+! 1. Redistributions of source code must retain the above copyright
+! notice, this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright
+! notice, this list of conditions and the following disclaimer in the
+! documentation and/or other materials provided with the distribution.
+!
+! THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+! OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+! WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+! DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+! DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+! GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+! WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+! NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+! SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+!
+! ******************************************************************************
+
 ! * -- ATOM format -- *
 ! 1. 1-6(A6): 'ATOM  '
 ! 2. 7-11(I5): Atom serial number
-! 3.  blank 1x 
+! 3.  blank 1x
 ! 4. 13-16(A4):Atom name
 ! 5. 17(A1): Alternate location indicator
 ! 6. 18-20(A3): Residume name
@@ -35,7 +75,7 @@ module io
   !****************
   ! other modules
   !****************
-  use precision 
+  use precision
   use atom_mod
   use group_mod
 
@@ -43,8 +83,12 @@ module io
 
   private  ! hide the type-bound procedure implementation procedures
   public :: readline
+  public :: readcif
 
 contains
+  ! **********************************************************************
+  ! Read PDB/stride file
+  ! **********************************************************************
   function readline(filename, kinkOnly) result(group_obj)
     character(*), intent(in) :: filename
     logical, intent(in) :: kinkOnly
@@ -129,5 +173,28 @@ contains
     ! close file
     close(fh)
   end function readline
+
+  ! **********************************************************************
+  ! Read protein structure in CIF format
+  ! **********************************************************************
+  function readcif (filename) result(group_obj)
+    character(*), intent(in) :: filename
+    character(len=100) :: buffer, label
+    integer, parameter :: fh = 15
+    integer :: ios = 5
+
+    type(group):: group_obj
+
+    ! open files
+    open(fh, file=filename, status='old', action='read')
+    ! ios is negative if an end of record condition is encountered or if
+    ! an endfile condition was detected.  It is positive if an error was
+    ! detected.  ios is zero otherwise.
+    do while (ios == 0)
+       
+    end do
+    ! close file
+    close(fh)
+  end function readcif
 
 end module io

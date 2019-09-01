@@ -1,12 +1,49 @@
+! ******************************************************************************
+!
+! file: utilities.f90
+!
+!
+! author: Cao Wei
+! Timestamp: Sun Jul  7 19:44:06 2019
+!
+! Copyright (C) 2019 Cao Wei. All rights reserved.
+!
+!
+! The following statement of license applies *only* to this header file,
+! and *not* to the other files distributed with FFTW or derived therefrom:
+!
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions
+! are met:
+!
+! 1. Redistributions of source code must retain the above copyright
+! notice, this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright
+! notice, this list of conditions and the following disclaimer in the
+! documentation and/or other materials provided with the distribution.
+!
+! THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+! OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+! WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+! DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+! DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+! GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+! WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+! NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+! SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+!
+! ******************************************************************************
+
 !*******************************************************************************
 ! Description:
 !
 ! Utitlity functions/ subroutines
-! 
 !
-! Licensing:
 !
-!    This code is distributed under the GNU LGPL license.
 !
 !  Modified:
 !
@@ -21,6 +58,7 @@
 !*******************************************************************************
 
 module utilities
+
   use precision
 
   private:: report_r1, report_r2
@@ -69,7 +107,7 @@ contains
   ! Standard format:
   !    f90 and later
   !
-  ! Status: 
+  ! Status:
   !    OK
   ! Arguments:
   !   mat (array): Nxd elements, N samples and d dimensions
@@ -109,7 +147,7 @@ contains
   ! Standard format:
   !    f90 and later
   !
-  ! Status: 
+  ! Status:
   !    OK
   ! Arguments:
   !   mat (array): 1xd elements, 1 samples and d dimensions
@@ -145,7 +183,7 @@ contains
   ! Standard format:
   !    f90 and later
   !
-  ! Status: 
+  ! Status:
   !    OK
   ! Arguments:
   !   mat (array): 1xd elements, 1 samples and d dimensions
@@ -185,7 +223,7 @@ contains
   ! Standard format:
   !    f90 and later
   !
-  ! Status: 
+  ! Status:
   !    OK
   ! Arguments:
   !
@@ -221,7 +259,7 @@ contains
       p(1:min(nold,n),1:min(mold,m))
     deallocate(p)
   end function reallocate_rm
-  
+
   function reallocate_iv(p, n)
     integer, dimension(:), pointer :: p, reallocate_iv
     integer, intent(in) :: n
@@ -270,7 +308,7 @@ contains
   ! Standard format:
   !    f90 and later
   !
-  ! Status: 
+  ! Status:
   !    OK
   ! Arguments:
   !
@@ -282,18 +320,18 @@ contains
     real(DP), dimension(:), intent(in) :: src
     real(DP), dimension(:), intent(out) :: dest
     integer, intent(out) :: n_copied, n_not_copied
-    n_copied=min(size(src),size(dest))
-    n_not_copied=size(src)-n_copied
-    dest(1:n_copied)=src(1:n_copied)
+    n_copied = min(size(src),size(dest))
+    n_not_copied = size(src) - n_copied
+    dest(1:n_copied) = src(1:n_copied)
   end subroutine array_copy_d
 
   subroutine array_copy_i(src,dest,n_copied,n_not_copied)
     integer, dimension(:), intent(in) :: src
     integer, dimension(:), intent(out) :: dest
     integer, intent(out) :: n_copied, n_not_copied
-    n_copied=min(size(src),size(dest))
-    n_not_copied=size(src)-n_copied
-    dest(1:n_copied)=src(1:n_copied)
+    n_copied = min(size(src),size(dest))
+    n_not_copied = size(src) - n_copied
+    dest(1:n_copied) = src(1:n_copied)
   end subroutine array_copy_i
 
 end module utilities

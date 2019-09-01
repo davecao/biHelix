@@ -3,20 +3,20 @@
 ########################################
 
 # Add the source files
-SET(HPSRC   ${SRC}/cla.f95
-            ${SRC}/kinds.f95
+SET(HPSRC   ${SRC}/cla.f90
+            ${SRC}/kinds.f90
+            ${SRC}/precision.f90
             ${SRC}/stringmod.f90
-            ${SRC}/precision.f95
-            ${SRC}/interp_hel.f95
-            ${SRC}/io.f95
-            ${SRC}/desp.f95
-            ${SRC}/mem_mod.f95
-            ${SRC}/atom.f95
-            ${SRC}/group.f95
-            ${SRC}/utilities.f95
-            ${SRC}/linalg.f95
-            ${SRC}/helanal.f95
-            ${SRC}/main.f95
+            ${SRC}/interp_hel.f90
+            ${SRC}/io.f90
+            ${SRC}/desp.f90
+            ${SRC}/mem_mod.f90
+            ${SRC}/atom.f90
+            ${SRC}/group.f90
+            ${SRC}/utilities.f90
+            ${SRC}/linalg.f90
+            ${SRC}/helanal.f90
+            ${SRC}/main.f90
 )
 
 #if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
@@ -42,9 +42,16 @@ SET(HPSRC   ${SRC}/cla.f95
 #set_compile_flag(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
 #    Fortran "-DQUAD_PRECISION"
 #)
+
 SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
-                 Fortran "-std=gnu"        # GNU
+                 Fortran "-stand f03"        # Intel
+                         "-std=f03"      # GNU
                  )
+#SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
+#                 Fortran "-Tf"   # GNU
+#                         "-Tf"        # Intel
+#                 )
+
 message(STATUS "CMAKE_Fortran_FLAGS_RELEASE " ${CMAKE_Fortran_FLAGS_RELEASE})
 message(STATUS "CMAKE_Fortran_FLAGS_DEBUG " ${CMAKE_Fortran_FLAGS_DEBUG})
 #set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG}"
@@ -52,8 +59,8 @@ message(STATUS "CMAKE_Fortran_FLAGS_DEBUG " ${CMAKE_Fortran_FLAGS_DEBUG})
 #            "-DQUAD_PRECISION"
 #            "-c"
 #            "-fdefault-real-8"
-#            "-fbacktrace" 
-#            "-fno-align-commons" 
+#            "-fbacktrace"
+#            "-fno-align-commons"
 #            "-fbounds-check"
 #)
 
@@ -68,7 +75,7 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${HPSRC})
 #TARGET_LINK_LIBRARIES(${EXECUTABLE} ${BARLIB})
 
 # Uncomment if you need to link to BLAS and LAPACK
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
+TARGET_LINK_LIBRARIES(${PROJECT_NAME}
     ${BLAS_LIBRARIES}
     ${LAPACK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT})

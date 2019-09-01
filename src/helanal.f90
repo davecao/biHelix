@@ -173,7 +173,7 @@ contains
   !    f90 and later
   !
   ! Status:
-  !    OK 
+  !    OK
   !
   ! Arguments:
   !   p (array): a vector of 1xN array
@@ -181,7 +181,7 @@ contains
   ! Returns:
   !   ave (real) : average of p, sum(x)/npts
   !   var (real) : variance of p, E^2-E
-  !   sdev (real) : 
+  !   sdev (real) :
   !   mean_abs_std(real)
   !*****************************************************************************
   subroutine stats(p, ave, var, sdev, mean_abs_std)
@@ -206,14 +206,14 @@ contains
 
   !*****************************************************************************
   ! Description:
-  !   For a given four continuous 3d points, find direction along the helix 
+  !   For a given four continuous 3d points, find direction along the helix
   !   axis, origins, twist angle, and height of the turn of a helix
-  !  
+  !
   ! Standard format:
   !    f90 and later
   !
   ! Status:
-  !    OK 
+  !    OK
   !
   ! Arguments:
   !   p1 (array): a vector of 1x3 array
@@ -310,7 +310,7 @@ contains
   ! Returns:
   !   tilt_angle (dp): angle  between helix axis and reference axis
   !   axvec (array of 3): normal vector from svd
-  !   radc (dp): 
+  !   radc (dp):
   !   rmsdc (dp):
   !   rmsdl (dp):
   !   r2 (dp):
@@ -444,7 +444,7 @@ contains
     !f2py real(DP), intent(out) bending_angles
     ! real(DP), intent(out)::  radc, rmsdc, rmsdl, r2
     ! real(DP), intent(out):: r2
-    
+
     ! *-- local variables --*
     logical :: quiet = .FALSE.
     real(DP):: direct(3)

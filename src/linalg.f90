@@ -1,4 +1,44 @@
-! gfortran -cpp -DQUAD_PRECISION -g -c linalg.f95
+! ******************************************************************************
+!
+! file: linalg.f90
+!
+!
+! author: Cao Wei
+! Timestamp: Sun Jul  7 19:40:49 2019
+!
+! Copyright (C) 2019 Cao Wei. All rights reserved.
+!
+!
+! The following statement of license applies *only* to this header file,
+! and *not* to the other files distributed with FFTW or derived therefrom:
+!
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions
+! are met:
+!
+! 1. Redistributions of source code must retain the above copyright
+! notice, this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright
+! notice, this list of conditions and the following disclaimer in the
+! documentation and/or other materials provided with the distribution.
+!
+! THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+! OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+! WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+! DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+! DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+! GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+! WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+! NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+! SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+!
+! ******************************************************************************
+
+! gfortran -cpp -DQUAD_PRECISION -g -c linalg.f90
 !   option -cpp: used to process preprocessing option
 
 module linalg
@@ -16,7 +56,7 @@ module linalg
   interface svd
      module procedure lapack_dgesvd_interface
   end interface svd
-  
+
   public :: outer, cross, vecDegree
   public :: matinv, M33INV, inverse, inv
   public :: prj
@@ -24,7 +64,7 @@ module linalg
   !public:: norm
   !interface norm
   !  module procedure L2norm ! interface for a module;procedure is implicit
-  !  module procedure L1norm 
+  !  module procedure L1norm
   !  module procedure Lmax
   !end interface norm
 
@@ -63,7 +103,7 @@ contains
     real(DP), dimension(3), intent(out) :: p
     real(DP), dimension(3) :: norm_v
     real(DP) :: magnitude_v, dot_uv
-    
+
     magnitude_v = norm2(v)
     norm_v = v / magnitude_v
     dot_uv = dot_product(u, v)
@@ -125,7 +165,7 @@ contains
   !
   !  A       = input 3x3 matrix to be inverted
   !  AINV    = output 3x3 inverse of matrix A
-  !  OK_FLAG = (output) .TRUE. if the input matrix could be inverted, 
+  !  OK_FLAG = (output) .TRUE. if the input matrix could be inverted,
   !            and .FALSE. if the input matrix is singular.
   !*****************************************************************************
   subroutine M33INV (A, Ainv, OK_FLAG)
@@ -179,11 +219,11 @@ contains
   ! output ...
   ! c(n,n) - inverse matrix of A
   ! comments ...
-  ! the original matrix a(n,n) will be destroyed 
+  ! the original matrix a(n,n) will be destroyed
   ! during the calculation
   !=============================================================================
   subroutine inverse(a,c,n)
-    implicit none 
+    implicit none
     integer n
     double precision a(n,n), c(n,n)
     double precision L(n,n), U(n,n), b(n), d(n), x(n)
@@ -207,7 +247,7 @@ contains
        end do
     end do
 
-    ! Step 2: prepare L and U matrices 
+    ! Step 2: prepare L and U matrices
     ! L matrix is a matrix of the elimination coefficient
     ! + the diagonal elements are 1.0
     do i=1,n
@@ -251,14 +291,14 @@ contains
   !*****************************************************************************
   ! Description:
   !   Find inverse of a matrix using dgetrf and dgetri of LAPACK
-  ! 
+  !
   ! Standard format:
   !    f90 and later
   !
   ! Status:
   !    OK
-  ! Note: To ill-conditioned matrix, severe problem with dgetrf and dgetri 
-  !     
+  ! Note: To ill-conditioned matrix, severe problem with dgetrf and dgetri
+  !
   ! Arguments:
   !   A (array): a vector of MxN array
   !
@@ -308,7 +348,7 @@ contains
   !    f90 and later
   !
   ! Status:
-  !    OK 
+  !    OK
   ! Arguments:
   !   a (array): a vector of N elements
   !   b (array): a vector of N elements
@@ -416,7 +456,7 @@ contains
 
   !*****************************************************************************
   ! Description:
-  !    normalize a vector with the maximum 
+  !    normalize a vector with the maximum
   !
   ! Arguments:
   !    A(array of rank1): a d-dimensional vector
